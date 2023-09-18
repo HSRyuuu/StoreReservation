@@ -11,13 +11,14 @@ import java.util.UUID;
 @Slf4j
 public class LogInterceptor implements HandlerInterceptor {
     public static String LOG_ID = "logId";
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String requestURI = request.getRequestURI();
         String uuid = UUID.randomUUID().toString(); // uuid 생성
-        request.setAttribute(LOG_ID,uuid); //afterCompletion에서 사용
+        request.setAttribute(LOG_ID, uuid); //afterCompletion에서 사용
 
-        if(handler instanceof HandlerMethod){
+        if (handler instanceof HandlerMethod) {
             HandlerMethod hm = (HandlerMethod) handler;
 
         }
@@ -31,7 +32,7 @@ public class LogInterceptor implements HandlerInterceptor {
         String requestURI = request.getRequestURI();
         String uuid = (String) request.getAttribute(LOG_ID); //preHandle에서 생성한 uuid
         //오류발생시 오류 로그도 찍어주자.
-        if(ex!=null){
+        if (ex != null) {
             log.error("afterCompletion error!!", ex);
         }
     }

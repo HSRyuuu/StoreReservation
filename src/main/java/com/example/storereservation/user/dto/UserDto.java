@@ -1,7 +1,6 @@
 package com.example.storereservation.user.dto;
 
 
-import com.example.storereservation.web.security.MemberType;
 import com.example.storereservation.user.entity.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,24 +15,22 @@ import java.time.LocalDateTime;
 @Builder
 public class UserDto {
 
-    private Long id;
     private String userId;
     private String password;
 
-    private String userName;
+    private String name;
     private String phone;
 
-    private MemberType memberType; //ROLE_USER
+    private String memberType; //ROLE_USER
 
     private LocalDateTime createAt;
     private LocalDateTime updateDt;
 
     public static UserDto fromEntity(UserEntity userEntity){
         return UserDto.builder()
-                .id(userEntity.getId())
                 .userId(userEntity.getUserId())
                 .password(userEntity.getPassword())
-                .userName(userEntity.getUserName())
+                .name(userEntity.getName())
                 .phone(userEntity.getPhone())
                 .memberType(userEntity.getMemberType())
                 .createAt(userEntity.getCreateAt())

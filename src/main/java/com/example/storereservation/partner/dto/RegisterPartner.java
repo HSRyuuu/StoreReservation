@@ -33,7 +33,7 @@ public class RegisterPartner {
                     .password(request.getPassword())
                     .partnerName(request.getPartnerName())
                     .phone(request.getPhone())
-                    .memberType(MemberType.ROLE_PARTNER)
+                    .memberType(MemberType.ROLE_PARTNER.toString())
                     .createAt(LocalDateTime.now())
                     .build();
         }
@@ -51,7 +51,7 @@ public class RegisterPartner {
 
 
         private LocalDateTime createAt;
-        private MemberType memberType;
+        private String memberType;
 
         public static Response fromDto(PartnerDto partnerDto){
             return Response.builder()

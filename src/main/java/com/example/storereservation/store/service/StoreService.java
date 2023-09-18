@@ -36,7 +36,7 @@ public class StoreService {
      */
     public StoreDto addStore(String partnerId, AddStore.Request request){
         PartnerEntity partner = partnerRepository.findByPartnerId(partnerId)
-                .orElseThrow(() -> new MyException(ErrorCode.PARTNER_DOESNT_EXIST));
+                .orElseThrow(() -> new MyException(ErrorCode.PARTNER_NOT_FOUND));
 
         this.requestValidate(partnerId, request.getStoreName());
 

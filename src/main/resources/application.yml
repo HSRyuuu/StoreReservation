@@ -12,3 +12,12 @@ spring:
     show-sql: true
     defer-datasource-initialization: true
     open-in-view: true
+
+  jwt:
+    secret: 66WY7ZiE7Iud
+
+logging:
+  level:
+    org:
+      springframework:
+        web: info

@@ -24,7 +24,7 @@ public class StoreController {
      * @param partnerId : 파트너 ID
      * @param request   : 상점 정보 입력
      */
-    @PostMapping("/partner/register/store/{partnerId}")
+    @PostMapping("/partner/register-store/{partnerId}")
     public ResponseEntity<?> registerStore(@PathVariable String partnerId,
                                            @RequestBody AddStore.Request request) {
         StoreDto savedStore = storeService.addStore(partnerId, request);
@@ -42,6 +42,7 @@ public class StoreController {
 
     /**
      * 매장 검색
+     *
      * @param page
      * @param input : storeName, sortType
      */

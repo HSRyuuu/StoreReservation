@@ -1,8 +1,8 @@
 package com.example.storereservation.user.dto;
 
 
-import com.example.storereservation.web.security.MemberType;
 import com.example.storereservation.user.entity.UserEntity;
+import com.example.storereservation.web.security.MemberType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,7 +23,7 @@ public class RegisterUser {
         private String password;
         private String passwordCheck;
 
-        private String userName;
+        private String name;
         private String phone;
 
         private MemberType memberType;//ROLE_USER
@@ -32,9 +32,9 @@ public class RegisterUser {
             return UserEntity.builder()
                     .userId(request.getUserId())
                     .password(request.getPassword())
-                    .userName(request.getUserName())
+                    .name(request.getName())
                     .phone(request.getPhone())
-                    .memberType(MemberType.ROLE_USER)
+                    .memberType(MemberType.ROLE_USER.toString())
                     .createAt(LocalDateTime.now())
                     .build();
         }
@@ -48,16 +48,16 @@ public class RegisterUser {
         //입력받은 값
         private String userId;
 
-        private String userName;
+        private String name;
         private String phone;
         //서버 측 설정 값
         private LocalDateTime createAt;
-        private MemberType memberType;
+        private String memberType;
 
         public static Response fromDto(UserDto userDto){
             return Response.builder()
                     .userId(userDto.getUserId())
-                    .userName(userDto.getUserName())
+                    .name(userDto.getName())
                     .phone(userDto.getPhone())
                     .memberType(userDto.getMemberType())
                     .createAt(userDto.getCreateAt())

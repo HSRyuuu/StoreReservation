@@ -1,13 +1,8 @@
 package com.example.storereservation.web.controller;
 
 import com.example.storereservation.partner.service.PartnerService;
-import com.example.storereservation.partner.dto.PartnerDto;
-import com.example.storereservation.partner.dto.RegisterPartner;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
@@ -16,15 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class PartnerController {
 
     private final PartnerService partnerService;
-    /**
-     * 파트너 회원가입
-     */
-    @PostMapping("/register/partner")
-    public ResponseEntity<?> registerPartner(@RequestBody RegisterPartner.Request request){
-        PartnerDto registeredManager = partnerService.register(request);
-
-        return ResponseEntity.ok(RegisterPartner.Response.fromDto(registeredManager));
-    }
 
 
 //    /**
