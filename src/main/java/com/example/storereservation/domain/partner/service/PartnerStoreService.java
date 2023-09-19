@@ -62,9 +62,14 @@ public class PartnerStoreService {
         if(!partnerRepository.existsByPartnerId(partnerId)){
             throw new MyException(ErrorCode.PARTNER_NOT_FOUND);
         }
+        if(!storeRepository.findByPartnerId(partnerId).get().getStoreName().equals(request.getStoreName())
+                && storeRepository.existsByStoreName(request.getStoreName())){
+            throw new MyException(ErrorCode.STORE_NAME_ALREADY_EXISTS);
+        }
+
         StoreEntity storeEntity = storeRepository.findByPartnerId(partnerId)
                 .orElseThrow(() -> new MyException(ErrorCode.STORE_NOT_FOUND));
-        storeEntity.setEditParameter(request);
+        storeEntity.edit(request);
 
         StoreEntity updated = storeRepository.save(storeEntity);
 

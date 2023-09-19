@@ -208,6 +208,40 @@ class PartnerStoreServiceTest {
             assertThat(e.getErrorCode()).isEqualTo(ErrorCode.PARTNER_NOT_FOUND);
         }
     }
+
+    @Test
+    @DisplayName("editStore_변경하려는 상점 명이 이미 존재함")
+    void editStore_STORE_NAME_ALREADY_EXISTS() {
+        //given
+        AddStore.Request addRequest1 = AddStore.Request.builder()
+                .storeName("tStoreName1")
+                .storeAddr("tStoreAddr")
+                .text("test text")
+                .build();
+        StoreDto storeAdd = partnerStoreService.addStore(PARTNER_ID_1, addRequest1);
+
+        AddStore.Request addRequest2 = AddStore.Request.builder()
+                .storeName("tStoreName2")
+                .storeAddr("tStoreAddr")
+                .text("test text")
+                .build();
+        partnerStoreService.addStore(PARTNER_ID_2, addRequest2);
+
+        //when
+        EditStore.Request editRequest = EditStore.Request.builder()
+                .storeName("tStoreName")
+                .storeAddr("edit")
+                .text("edit")
+                .build();
+
+        try{
+            partnerStoreService.editStore(PARTNER_ID_1, editRequest);
+        }//then
+        catch(MyException e){
+            assertThat(e.getErrorCode()).isEqualTo(ErrorCode.STORE_NAME_ALREADY_EXISTS);
+        }
+    }
+
     @Test
     @DisplayName("editStore_해당 파트너의 매장이 존재하지 않음")
     void editStore_STORE_NOT_FOUND() {

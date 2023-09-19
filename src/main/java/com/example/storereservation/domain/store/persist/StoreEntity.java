@@ -31,7 +31,7 @@ public class StoreEntity {
     private LocalDateTime createAt;
     private LocalDateTime updateAt;
 
-    public void setEditParameter(EditStore.Request request){
+    public void edit(EditStore.Request request){
         if(StringUtils.hasText(request.getStoreName())){
             this.storeName = request.getStoreName();
         }

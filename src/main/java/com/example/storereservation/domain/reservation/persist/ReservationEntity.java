@@ -1,14 +1,12 @@
 package com.example.storereservation.domain.reservation.persist;
 
+import com.example.storereservation.domain.reservation.type.ReservationStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Getter
@@ -24,7 +22,13 @@ public class ReservationEntity {
     private String userId;
     private String phone;
 
+    private String partnerId;
     private String storeName;
+
+    private Integer people;
+
+    @Enumerated(EnumType.STRING)
+    private ReservationStatus status;
 
     private LocalDateTime time;
 }

@@ -1,12 +1,16 @@
 package com.example.storereservation.domain.partner.controller;
 
 import com.example.storereservation.domain.partner.dto.EditStore;
+import com.example.storereservation.domain.partner.persist.PartnerEntity;
 import com.example.storereservation.domain.partner.service.PartnerStoreService;
 import com.example.storereservation.domain.partner.dto.AddStore;
 import com.example.storereservation.domain.store.dto.StoreDto;
+import com.example.storereservation.global.exception.ErrorCode;
+import com.example.storereservation.global.exception.MyException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -35,7 +39,11 @@ public class PartnerStoreController {
      */
     @PutMapping("/partner/edit-store/{partnerId}")
     public ResponseEntity<?> editStore(@PathVariable String partnerId,
-                                           @RequestBody EditStore.Request request) {
+                                       @RequestBody EditStore.Request request,
+                                       @AuthenticationPrincipal PartnerEntity partner) {
+        if(!partnerId.equals(partner.getPartnerId())){
+            throw new MyException(ErrorCode.STORE_PARTNER_NOT_MATCH);
+        }
         StoreDto storeDto = partnerStoreService.editStore(partnerId, request);
         return ResponseEntity.ok(EditStore.Response.fromDto(storeDto));
     }

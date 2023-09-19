@@ -14,12 +14,20 @@ public enum ErrorCode {
 
     //PARTNER 관련
     PARTNER_NOT_FOUND(HttpStatus.BAD_REQUEST.value(), "해당 파트너가 존재하지 않습니다."),
+
+
     //USER 관련
     USER_NOT_FOUND(HttpStatus.BAD_REQUEST.value(), "해당 유저가 존재하지 않습니다."),
+
     //STORE 관련
     PARTNER_ALREADY_HAS_STORE(HttpStatus.CONFLICT.value(), "해당 파트너의 매장이 이미 존재합니다."),
     STORE_NAME_ALREADY_EXISTS(HttpStatus.CONFLICT.value(), "해당 매장 명이 이미 존재합니다."),
     STORE_NOT_FOUND(HttpStatus.CONFLICT.value(), "해당 매장이 존재하지 않습니다."),
+    STORE_PARTNER_NOT_MATCH(HttpStatus.FORBIDDEN.value(), "해당 파트너의 매장이 아닙니다."),
+
+    //RESERVATION 관련
+    INPUT_USER_ID_NOT_MATCH(HttpStatus.FORBIDDEN.value(), "입력받은 유저 아이디가 맞지 않습니다."),
+
 
     //Security
     TOKEN_TIME_OUT(HttpStatus.CONFLICT.value(), "토큰이 만료되었습니다."),

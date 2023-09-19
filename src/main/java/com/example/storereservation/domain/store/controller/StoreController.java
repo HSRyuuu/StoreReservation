@@ -16,19 +16,10 @@ import org.springframework.web.bind.annotation.*;
 public class StoreController {
 
     private final StoreService storeService;
-    /**
-     * 매장 상세
-     */
-    @GetMapping("/store/detail")
-    public ResponseEntity<?> storeDetail(@RequestParam String name) {
-        StoreDetail findStore = storeService.findByStoreName(name);
-        return ResponseEntity.ok(findStore);
-    }
 
     /**
      * 매장 검색
-     *
-     * @param page
+     * @param page : 페이지
      * @param input : storeName, sortType
      */
     @GetMapping("/store/list")
@@ -42,6 +33,16 @@ public class StoreController {
 
 
         return ResponseEntity.ok(findStores);
+    }
+
+    /**
+     * 매장 상세
+     * @param name : 매장 명
+     */
+    @GetMapping("/store/detail")
+    public ResponseEntity<?> storeDetail(@RequestParam String name) {
+        StoreDetail findStore = storeService.findByStoreName(name);
+        return ResponseEntity.ok(findStore);
     }
 
 
