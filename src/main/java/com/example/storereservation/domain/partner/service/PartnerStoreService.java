@@ -1,8 +1,9 @@
 package com.example.storereservation.domain.partner.service;
 
+import com.example.storereservation.domain.partner.dto.EditStore;
 import com.example.storereservation.domain.partner.persist.PartnerEntity;
 import com.example.storereservation.domain.partner.persist.PartnerRepository;
-import com.example.storereservation.domain.store.dto.AddStore;
+import com.example.storereservation.domain.partner.dto.AddStore;
 import com.example.storereservation.domain.store.dto.StoreDto;
 import com.example.storereservation.domain.store.persist.StoreEntity;
 import com.example.storereservation.domain.store.persist.StoreRepository;
@@ -51,4 +52,23 @@ public class PartnerStoreService {
             throw new MyException(ErrorCode.STORE_NAME_ALREADY_EXISTS);
         }
     }
+
+    /**
+     * 매장 정보 수정
+     * @param request
+     * @return
+     */
+    public StoreDto editStore(String partnerId, EditStore.Request request){
+        if(!partnerRepository.existsByPartnerId(partnerId)){
+            throw new MyException(ErrorCode.PARTNER_NOT_FOUND);
+        }
+        StoreEntity storeEntity = storeRepository.findByPartnerId(partnerId)
+                .orElseThrow(() -> new MyException(ErrorCode.STORE_NOT_FOUND));
+        storeEntity.setEditParameter(request);
+
+        StoreEntity updated = storeRepository.save(storeEntity);
+
+        return StoreDto.fromEntity(updated);
+    }
+
 }

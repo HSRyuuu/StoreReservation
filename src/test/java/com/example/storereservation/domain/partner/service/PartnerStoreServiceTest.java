@@ -1,10 +1,13 @@
 package com.example.storereservation.domain.partner.service;
 
+import com.example.storereservation.domain.partner.dto.EditStore;
 import com.example.storereservation.domain.partner.dto.RegisterPartner;
 import com.example.storereservation.domain.partner.persist.PartnerEntity;
 import com.example.storereservation.domain.partner.persist.PartnerRepository;
-import com.example.storereservation.domain.store.dto.AddStore;
+import com.example.storereservation.domain.partner.dto.AddStore;
 import com.example.storereservation.domain.store.dto.StoreDto;
+import com.example.storereservation.domain.store.persist.StoreEntity;
+import com.example.storereservation.domain.store.persist.StoreRepository;
 import com.example.storereservation.global.exception.ErrorCode;
 import com.example.storereservation.global.exception.MyException;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +32,8 @@ class PartnerStoreServiceTest {
     PartnerService partnerService;
     @Autowired
     PartnerRepository partnerRepository;
+    @Autowired
+    StoreRepository storeRepository;
 
     private static final String PARTNER_ID_1 =  "tPartnerId";
     private static final String PARTNER_ID_2 =  "tPartnerId2";
@@ -125,4 +130,110 @@ class PartnerStoreServiceTest {
             assertThat(e.getErrorCode()).isEqualTo(ErrorCode.STORE_NAME_ALREADY_EXISTS);
         }
     }
+
+    @Test
+    @DisplayName("editStore_정상_모든 파라미터")
+    void editStore_All_Parameters() {
+        //given
+        AddStore.Request addRequest = AddStore.Request.builder()
+                .storeName("tStoreName")
+                .storeAddr("tStoreAddr")
+                .text("test text")
+                .build();
+        StoreDto storeAdd = partnerStoreService.addStore(PARTNER_ID_1, addRequest);
+
+        //when
+        EditStore.Request editRequest = EditStore.Request.builder()
+                .storeName("edit")
+                .storeAddr("edit")
+                .text("edit")
+                .build();
+        partnerStoreService.editStore(PARTNER_ID_1, editRequest);
+
+        StoreEntity storeEdit = storeRepository.findByPartnerId(PARTNER_ID_1).get();
+
+        //then
+        assertThat(storeEdit.getStoreName()).isEqualTo("edit");
+        assertThat(storeEdit.getStoreAddr()).isEqualTo("edit");
+        assertThat(storeEdit.getText()).isEqualTo("edit");
+    }
+
+    @Test
+    @DisplayName("editStore_정상_일부 파라미터")
+    void editStore_Not_All_Parameters() {
+        //given
+        AddStore.Request addRequest = AddStore.Request.builder()
+                .storeName("tStoreName")
+                .storeAddr("tStoreAddr")
+                .text("test text")
+                .build();
+        StoreDto storeAdd = partnerStoreService.addStore(PARTNER_ID_1, addRequest);
+
+        //when
+        EditStore.Request editRequest = EditStore.Request.builder()
+                .text("edit")
+                .build();
+        partnerStoreService.editStore(PARTNER_ID_1, editRequest);
+
+        StoreEntity storeEdit = storeRepository.findByPartnerId(PARTNER_ID_1).get();
+
+        //then
+        assertThat(storeEdit.getStoreName()).isEqualTo("tStoreName");
+        assertThat(storeEdit.getStoreAddr()).isEqualTo("tStoreAddr");
+        assertThat(storeEdit.getText()).isEqualTo("edit");
+    }
+
+    @Test
+    @DisplayName("editStore_파트너가 존재하지 않음")
+    void editStore_PARTNER_NOT_FOUND() {
+        //given
+        AddStore.Request addRequest = AddStore.Request.builder()
+                .storeName("tStoreName")
+                .storeAddr("tStoreAddr")
+                .text("test text")
+                .build();
+        StoreDto storeAdd = partnerStoreService.addStore(PARTNER_ID_1, addRequest);
+
+        //when
+        EditStore.Request editRequest = EditStore.Request.builder()
+                .storeName("edit")
+                .storeAddr("edit")
+                .text("edit")
+                .build();
+
+        try{
+            partnerStoreService.editStore("asdfsadf", editRequest);
+        }//then
+        catch(MyException e){
+            assertThat(e.getErrorCode()).isEqualTo(ErrorCode.PARTNER_NOT_FOUND);
+        }
+    }
+    @Test
+    @DisplayName("editStore_해당 파트너의 매장이 존재하지 않음")
+    void editStore_STORE_NOT_FOUND() {
+        //given
+        AddStore.Request addRequest = AddStore.Request.builder()
+                .storeName("tStoreName")
+                .storeAddr("tStoreAddr")
+                .text("test text")
+                .build();
+        StoreDto storeAdd = partnerStoreService.addStore(PARTNER_ID_1, addRequest);
+
+        //when
+        EditStore.Request editRequest = EditStore.Request.builder()
+                .storeName("edit")
+                .storeAddr("edit")
+                .text("edit")
+                .build();
+
+        try{
+            partnerStoreService.editStore(PARTNER_ID_2, editRequest);
+        }//then
+        catch(MyException e){
+            assertThat(e.getErrorCode()).isEqualTo(ErrorCode.STORE_NOT_FOUND);
+        }
+    }
+
+
+
 }

@@ -1,6 +1,8 @@
 package com.example.storereservation.domain.store.persist;
 
+import com.example.storereservation.domain.partner.dto.EditStore;
 import lombok.*;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,7 +11,6 @@ import javax.persistence.Id;
 import java.time.LocalDateTime;
 
 @Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -29,6 +30,19 @@ public class StoreEntity {
 
     private LocalDateTime createAt;
     private LocalDateTime updateAt;
+
+    public void setEditParameter(EditStore.Request request){
+        if(StringUtils.hasText(request.getStoreName())){
+            this.storeName = request.getStoreName();
+        }
+        if(StringUtils.hasText(request.getStoreAddr())){
+            this.storeAddr = request.getStoreAddr();
+        }
+        if(StringUtils.hasText(request.getText())){
+            this.text = request.getText();
+        }
+        this.updateAt = LocalDateTime.now();
+    }
 
 
 

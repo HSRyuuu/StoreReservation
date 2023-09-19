@@ -1,9 +1,7 @@
 package com.example.storereservation.domain.store.controller;
 
-import com.example.storereservation.domain.store.dto.AddStore;
 import com.example.storereservation.domain.store.dto.ListQueryInput;
 import com.example.storereservation.domain.store.dto.StoreDetail;
-import com.example.storereservation.domain.store.dto.StoreDto;
 import com.example.storereservation.domain.store.service.StoreService;
 import com.example.storereservation.domain.store.type.SortType;
 import lombok.RequiredArgsConstructor;
