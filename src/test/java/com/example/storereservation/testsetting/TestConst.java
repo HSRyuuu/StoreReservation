@@ -1,4 +1,4 @@
-package com.example.storereservation.testconstant;
+package com.example.storereservation.testsetting;
 
 public interface TestConst {
     String TEST_PARTNER_ID = "TEST_PARTNER";

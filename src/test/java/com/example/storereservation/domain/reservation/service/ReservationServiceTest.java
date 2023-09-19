@@ -1,33 +1,23 @@
 package com.example.storereservation.domain.reservation.service;
 
-import com.example.storereservation.domain.partner.dto.AddStore;
-import com.example.storereservation.domain.partner.dto.RegisterPartner;
-import com.example.storereservation.domain.partner.service.PartnerService;
-import com.example.storereservation.domain.partner.service.PartnerStoreService;
 import com.example.storereservation.domain.reservation.dto.MakeReservation;
 import com.example.storereservation.domain.reservation.dto.ReservationDto;
-import com.example.storereservation.domain.store.service.StoreService;
 import com.example.storereservation.global.exception.ErrorCode;
 import com.example.storereservation.global.exception.MyException;
-import com.example.storereservation.testconstant.TestConst;
 import lombok.extern.slf4j.Slf4j;
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.transaction.Transactional;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
-import static com.example.storereservation.testconstant.TestConst.TEST_STORE_NAME;
-import static com.example.storereservation.testconstant.TestConst.TEST_USER_ID;
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static com.example.storereservation.testsetting.TestConst.TEST_STORE_NAME;
+import static com.example.storereservation.testsetting.TestConst.TEST_USER_ID;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
 @SpringBootTest

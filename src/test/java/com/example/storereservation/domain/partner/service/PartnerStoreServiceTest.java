@@ -35,7 +35,7 @@ class PartnerStoreServiceTest {
     @Autowired
     StoreRepository storeRepository;
 
-    private static final String PARTNER_ID_1 =  "tPartnerId";
+    private static final String PARTNER_ID_1 =  "tPartnerId1";
     private static final String PARTNER_ID_2 =  "tPartnerId2";
 
     @BeforeEach
@@ -229,7 +229,7 @@ class PartnerStoreServiceTest {
 
         //when
         EditStore.Request editRequest = EditStore.Request.builder()
-                .storeName("tStoreName")
+                .storeName("tStoreName2")
                 .storeAddr("edit")
                 .text("edit")
                 .build();
@@ -251,7 +251,7 @@ class PartnerStoreServiceTest {
                 .storeAddr("tStoreAddr")
                 .text("test text")
                 .build();
-        StoreDto storeAdd = partnerStoreService.addStore(PARTNER_ID_1, addRequest);
+        partnerStoreService.addStore(PARTNER_ID_1, addRequest);
 
         //when
         EditStore.Request editRequest = EditStore.Request.builder()
