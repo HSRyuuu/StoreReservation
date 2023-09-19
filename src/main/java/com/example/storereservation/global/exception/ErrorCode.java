@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public enum ErrorCode {
     //MEMBER 관련
-    PASSWORD_CHECK_ERROR(HttpStatus.BAD_REQUEST.value(), "비밀번호 확인이 일치하지 않습니다."),
+    PASSWORD_CHECK_INCORRECT(HttpStatus.BAD_REQUEST.value(), "비밀번호 확인이 일치하지 않습니다."),
     DUPLICATED_ID(HttpStatus.CONFLICT.value(), "이미 존재하는 아이디 입니다."),
     PASSWORD_INCORRECT(HttpStatus.CONFLICT.value(), "비밀번호가 일치하지 않습니다."),
 

@@ -19,8 +19,11 @@ public class UserService{
     private final UserRepository userRepository;
 
     public UserDto register(RegisterUser.Request request){
-        PasswordUtils.validatePlainTextPassword(
-                request.getPassword(), request.getPasswordCheck());
+        if(!PasswordUtils.validatePlainTextPassword(
+                request.getPassword(), request.getPasswordCheck())){
+            throw new MyException(ErrorCode.PASSWORD_CHECK_INCORRECT);
+        }
+
 
         if(userRepository.existsByUserId(request.getUserId())){
             throw new MyException(ErrorCode.DUPLICATED_ID);

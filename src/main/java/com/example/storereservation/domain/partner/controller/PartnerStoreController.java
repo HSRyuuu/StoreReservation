@@ -1,5 +1,6 @@
 package com.example.storereservation.domain.partner.controller;
 
+import com.example.storereservation.domain.partner.service.PartnerStoreService;
 import com.example.storereservation.domain.store.dto.AddStore;
 import com.example.storereservation.domain.store.dto.StoreDto;
 import com.example.storereservation.domain.store.service.StoreService;
@@ -15,18 +16,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 public class PartnerStoreController {
-    private final StoreService storeService;
+    private final PartnerStoreService partnerStoreService;
 
     /**
      * 상점 등록
-     *
      * @param partnerId : 파트너 ID
      * @param request   : 상점 정보 입력
      */
     @PostMapping("/partner/register-store/{partnerId}")
     public ResponseEntity<?> registerStore(@PathVariable String partnerId,
                                            @RequestBody AddStore.Request request) {
-        StoreDto savedStore = storeService.addStore(partnerId, request);
+        StoreDto savedStore = partnerStoreService.addStore(partnerId, request);
         return ResponseEntity.ok(AddStore.Response.fromDto(savedStore));
     }
 }

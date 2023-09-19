@@ -19,12 +19,15 @@ public class PartnerService{
     private final PartnerRepository partnerRepository;
 
     public PartnerDto register(RegisterPartner.Request request){
-        PasswordUtils.validatePlainTextPassword(
-                request.getPassword(), request.getPasswordCheck());
+        if(!PasswordUtils.validatePlainTextPassword(
+                request.getPassword(), request.getPasswordCheck())){
+            throw new MyException(ErrorCode.PASSWORD_CHECK_INCORRECT);
+        }
 
         if(partnerRepository.existsByPartnerId(request.getPartnerId())){
             throw new MyException(ErrorCode.DUPLICATED_ID);
         }
+
         request.setPassword(PasswordUtils.encPassword(request.getPassword()));
 
         PartnerEntity savedManager = partnerRepository.save(
@@ -33,6 +36,7 @@ public class PartnerService{
 
         return PartnerDto.fromEntity(savedManager);
     }
+
 
 
 

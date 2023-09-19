@@ -16,6 +16,7 @@ public class RegisterPartner {
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
+    @Builder
     public static class Request{
         private String partnerId;
 

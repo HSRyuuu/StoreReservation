@@ -31,6 +31,7 @@ public class StoreDto {
 
     public static StoreDto fromEntity(StoreEntity store){
         return StoreDto.builder()
+                .id(store.getId())
                 .partnerId(store.getPartnerId())
                 .storeName(store.getStoreName())
                 .storeAddr(store.getStoreAddr())

@@ -15,6 +15,7 @@ public class AddStore {
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
+    @Builder
     public static class Request{
         private String storeName;
         private String storeAddr;

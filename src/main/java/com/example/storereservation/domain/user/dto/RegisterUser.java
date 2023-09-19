@@ -16,6 +16,7 @@ public class RegisterUser {
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
+    @Builder
     public static class Request{
         //입력받은 값
         private String userId;

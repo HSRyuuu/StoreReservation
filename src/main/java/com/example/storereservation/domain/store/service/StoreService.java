@@ -24,40 +24,6 @@ import org.springframework.stereotype.Service;
 public class StoreService {
 
     private final StoreRepository storeRepository;
-    private final PartnerRepository partnerRepository;
-
-    /**
-     * 매장 추가하기
-     * 1. PARTNER_DOESNT_EXIST : 파트너 존재 확인
-     * 2. requestValidate
-     * -> PARTNER_ALREADY_HAS_STORE : 해당 파트너가 이미 매장을 등록했는지 확인
-     * -> STORE_NAME_ALREADY_EXISTS : 해당 매장명이 이미 존재하는지 확인
-     * 3. 해당 파트너 엔티티에 storeId, storeName 저장
-     */
-    public StoreDto addStore(String partnerId, AddStore.Request request){
-        PartnerEntity partner = partnerRepository.findByPartnerId(partnerId)
-                .orElseThrow(() -> new MyException(ErrorCode.PARTNER_NOT_FOUND));
-
-        this.requestValidate(partnerId, request.getStoreName());
-
-        StoreEntity savedStore = storeRepository.save(
-                AddStore.Request.toEntity(request, partnerId)
-        );
-
-        partner.setStore(savedStore.getId(), savedStore.getStoreName());
-        partnerRepository.save(partner);
-
-        return StoreDto.fromEntity(savedStore);
-    }
-
-    private void requestValidate(String partnerId, String storeName){
-        if(storeRepository.existsByPartnerId(partnerId)){
-            //테스트를 위해 여러개의 상점을 만들 수 있도록 설정
-            //throw new MyException(ErrorCode.PARTNER_ALREADY_HAS_STORE);
-        }else if(storeRepository.existsByStoreName(storeName)){
-            throw new MyException(ErrorCode.STORE_NAME_ALREADY_EXISTS);
-        }
-    }
 
     /**
      * 상점 명으로 상점 정보 찾기
