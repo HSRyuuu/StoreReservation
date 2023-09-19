@@ -43,7 +43,7 @@ class PartnerServiceTest {
     }
 
     @Test
-    @DisplayName("파트너 register_회원가입_비밀번호 확인 불일치")
+    @DisplayName("!!!파트너 register_회원가입_비밀번호 확인 불일치")
     void register_Fail_Password() {
         //given
         RegisterPartner.Request request = RegisterPartner.Request.builder()
@@ -63,7 +63,7 @@ class PartnerServiceTest {
     }
 
     @Test
-    @DisplayName("파트너 register_이미 존재하는 파트너")
+    @DisplayName("!!!파트너 register_이미 존재하는 파트너")
     void register_DUPLICATED_PARTNER() {
         //given
         RegisterPartner.Request request1 = RegisterPartner.Request.builder()

@@ -71,7 +71,7 @@ class AuthServiceTest {
     }
 
     @Test
-    @DisplayName("유저 auth_아이디 없음")
+    @DisplayName("!!!유저 auth_아이디 없음")
     void authenticateUser_USER_NOT_FOUND() {
         //given
         LoginInput loginInput = new LoginInput("asdfasdf", USER_PW);
@@ -86,7 +86,7 @@ class AuthServiceTest {
     }
 
     @Test
-    @DisplayName("유저 auth_비밀번호 틀림")
+    @DisplayName("!!!유저 auth_비밀번호 틀림")
     void authenticateUser_PASSWORD_INCORRECT() {
         //given
         LoginInput loginInput = new LoginInput(USER_ID, "asdfasdf");
@@ -114,7 +114,7 @@ class AuthServiceTest {
     }
 
     @Test
-    @DisplayName("파트너 auth_파트너 없음")
+    @DisplayName("!!!파트너 auth_파트너 없음")
     void authenticatePartner_PARTNER_NOT_FOUND() {
         //given
         LoginInput loginInput = new LoginInput("asdfasdf", PARTNER_PW);
@@ -129,7 +129,7 @@ class AuthServiceTest {
     }
 
     @Test
-    @DisplayName("파트너 auth_비밀번호 틀림")
+    @DisplayName("!!!파트너 auth_비밀번호 틀림")
     void authenticatePartner_PASSWORD_INCORRECT() {
         //given
         LoginInput loginInput = new LoginInput(PARTNER_ID, "asdfasdfaasdf");

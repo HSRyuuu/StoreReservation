@@ -54,7 +54,7 @@ class StoreServiceTest {
     }
 
     @Test
-    @DisplayName("findByStoreName_성공")
+    @DisplayName("매장 검색_성공")
     void findByStoreName() {
         //given : beforeEach에서 store 생성 (ID : STORE_NAME)
 
@@ -66,7 +66,7 @@ class StoreServiceTest {
 
     }
     @Test
-    @DisplayName("findByStoreName_매장명이 존재하지 않음")
+    @DisplayName("!!!매장 검색_매장명이 존재하지 않음")
     void findByStoreName_STORE_NOT_FOUND() {
         //given : beforeEach에서 store 생성 (ID : STORE_NAME)
 

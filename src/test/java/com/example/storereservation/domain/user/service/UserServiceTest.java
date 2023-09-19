@@ -43,7 +43,7 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("유저 register_비밀번호 확인 불일치")
+    @DisplayName("!!!유저 register_비밀번호 확인 불일치")
     void register_FAIL_PASSWORD_CHECK_INCORRECT() {
         //given
         RegisterUser.Request request = RegisterUser.Request.builder()
@@ -63,7 +63,7 @@ class UserServiceTest {
         }
     }
     @Test
-    @DisplayName("유저 register_중복 유저")
+    @DisplayName("!!!유저 register_중복 유저")
     void register_FAIL_DUPLICATED_USER() {
         //given
         RegisterUser.Request request1 = RegisterUser.Request.builder()

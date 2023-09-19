@@ -86,7 +86,7 @@ class ReservationServiceTest {
     }
 
     @Test
-    @DisplayName("reservationDetail_성공")
+    @DisplayName("예약 상세_성공")
     void reservationDetail() {
         //given
         MakeReservation.Request request = MakeReservation.Request.builder()
@@ -115,7 +115,7 @@ class ReservationServiceTest {
     }
 
     @Test
-    @DisplayName("reservationDetail_예약이 존재하지 않음")
+    @DisplayName("!!!예약 상세_예약이 존재하지 않음")
     void reservationDetail_RESERVATION_NOT_FOUND() {
         //given
         MakeReservation.Request request = MakeReservation.Request.builder()
@@ -137,7 +137,7 @@ class ReservationServiceTest {
         }
     }
     @Test
-    @DisplayName("reservationDetail_예약 접근 권한 없음")
+    @DisplayName("!!!예약 상세_예약 접근 권한 없음")
     void reservationDetail_ACCESS_DENIED() {
         //given
         MakeReservation.Request request = MakeReservation.Request.builder()

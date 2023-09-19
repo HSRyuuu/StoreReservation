@@ -79,7 +79,7 @@ class PartnerStoreServiceTest {
     }
 
     @Test
-    @DisplayName("addStore_PARTNER_NOT_FOUND")
+    @DisplayName("!!!addStore_해당 파트너가 존재하지 않음")
     void addStore_PARTNER_NOT_FOUND() {
         //given
         AddStore.Request request = AddStore.Request.builder()
@@ -96,7 +96,7 @@ class PartnerStoreServiceTest {
     }
 
     @Test
-    @DisplayName("addStorePARTNER_ALREADY_HAS_STORE")
+    @DisplayName("!!!addStore_파트너가 이미 매장을 등록함")
     void addStore_PARTNER_ALREADY_HAS_STORE() {
         //given
         AddStore.Request request = AddStore.Request.builder()
@@ -114,7 +114,7 @@ class PartnerStoreServiceTest {
     }
 
     @Test
-    @DisplayName("addStore_STORE_NAME_ALREADY_EXISTS")
+    @DisplayName("!!!addStore_매장명이 이미 있음")
     void addStore_STORE_NAME_ALREADY_EXISTS() {
         //given
         AddStore.Request request = AddStore.Request.builder()
@@ -184,7 +184,7 @@ class PartnerStoreServiceTest {
     }
 
     @Test
-    @DisplayName("editStore_파트너가 존재하지 않음")
+    @DisplayName("!!!editStore_파트너가 존재하지 않음")
     void editStore_PARTNER_NOT_FOUND() {
         //given
         AddStore.Request addRequest = AddStore.Request.builder()
@@ -210,7 +210,7 @@ class PartnerStoreServiceTest {
     }
 
     @Test
-    @DisplayName("editStore_변경하려는 상점 명이 이미 존재함")
+    @DisplayName("!!!editStore_변경하려는 상점 명이 이미 존재함")
     void editStore_STORE_NAME_ALREADY_EXISTS() {
         //given
         AddStore.Request addRequest1 = AddStore.Request.builder()
@@ -243,7 +243,7 @@ class PartnerStoreServiceTest {
     }
 
     @Test
-    @DisplayName("editStore_해당 파트너의 매장이 존재하지 않음")
+    @DisplayName("!!!editStore_해당 파트너의 매장이 존재하지 않음")
     void editStore_STORE_NOT_FOUND() {
         //given
         AddStore.Request addRequest = AddStore.Request.builder()
