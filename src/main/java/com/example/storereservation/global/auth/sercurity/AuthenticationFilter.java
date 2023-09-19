@@ -33,7 +33,6 @@ public class AuthenticationFilter extends OncePerRequestFilter {
             Authentication auth = tokenProvider.getAuthentication(token);
             SecurityContextHolder.getContext().setAuthentication(auth);
             log.info("토큰 유효성 검증 성공");
-
         }
         filterChain.doFilter(request, response);
     }

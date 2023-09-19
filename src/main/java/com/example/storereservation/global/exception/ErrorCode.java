@@ -26,13 +26,15 @@ public enum ErrorCode {
     STORE_PARTNER_NOT_MATCH(HttpStatus.FORBIDDEN.value(), "해당 파트너의 매장이 아닙니다."),
 
     //RESERVATION 관련
-    INPUT_USER_ID_NOT_MATCH(HttpStatus.FORBIDDEN.value(), "입력받은 유저 아이디가 맞지 않습니다."),
+    RESERVATION_NOT_FOUND(HttpStatus.BAD_REQUEST.value(), "예약 정보를 찾을 수 없습니다."),
+
+
 
 
     //Security
     TOKEN_TIME_OUT(HttpStatus.CONFLICT.value(), "토큰이 만료되었습니다."),
-    ACCESS_DENIED(HttpStatus.FORBIDDEN.value(), "해당 사용자는 접근할 수 없는 페이지 입니다."),
-    UNAUTHORIZED(HttpStatus.UNAUTHORIZED.value(), "로그인이 되지 않았습니다."),
+    ACCESS_DENIED(HttpStatus.FORBIDDEN.value(), "접근 권한이 없습니다."),
+    LOGIN_REQUIRED(HttpStatus.UNAUTHORIZED.value(), "로그인이 되지 않았습니다."),
 
     //BASIC
     NOT_FOUND_ERROR(HttpStatus.NOT_FOUND.value(), "404 NOT FOUND"),

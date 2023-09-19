@@ -20,7 +20,10 @@ public class ReservationDto {
 
     private Integer people;
 
+    @Enumerated(EnumType.STRING)
     private ReservationStatus status;
+    private LocalDateTime statusUpdatedAt;
+
 
     private LocalDateTime time;
 
@@ -33,6 +36,7 @@ public class ReservationDto {
                 .storeName(reservationEntity.getStoreName())
                 .people(reservationEntity.getPeople())
                 .status(reservationEntity.getStatus())
+                .statusUpdatedAt(reservationEntity.getStatusUpdatedAt())
                 .time(reservationEntity.getTime())
                 .build();
     }

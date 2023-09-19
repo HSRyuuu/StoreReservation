@@ -1,4 +1,4 @@
-package com.example.storereservation.global.auth.sercurity.errorHandler;
+package com.example.storereservation.global.auth.securityconfig.errorHandler;
 
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;

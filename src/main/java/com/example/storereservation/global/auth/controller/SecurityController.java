@@ -1,4 +1,4 @@
-package com.example.storereservation.global.auth.sercurity;
+package com.example.storereservation.global.auth.controller;
 
 import com.example.storereservation.global.exception.ErrorCode;
 import com.example.storereservation.global.exception.MyException;
@@ -18,16 +18,6 @@ public class SecurityController {
 
     @GetMapping("/exception/unauthorized")
     public void unauthorized() {
-        throw new MyException(ErrorCode.UNAUTHORIZED);
-    }
-
-    @GetMapping("/login/success")
-    public ResponseEntity<?> loginSuccess() {
-        return ResponseEntity.ok("로그인 되었습니다.");
-    }
-
-    @GetMapping("/logout/success")
-    public ResponseEntity<?> logoutSuccess() {
-        return ResponseEntity.ok("로그아웃 되었습니다.");
+        throw new MyException(ErrorCode.LOGIN_REQUIRED);
     }
 }

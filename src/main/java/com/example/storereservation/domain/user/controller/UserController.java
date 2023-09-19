@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,13 +28,16 @@ public class UserController {
     @PostMapping("/reservation/request")
     public ResponseEntity<?> reservation(@RequestBody MakeReservation.Request request,
                                          @AuthenticationPrincipal UserEntity user){
-        if(!user.getUserId().equals(request.getUserId())){
-            throw new MyException(ErrorCode.INPUT_USER_ID_NOT_MATCH);
+        if(ObjectUtils.isEmpty(user)){
+            throw new MyException(ErrorCode.LOGIN_REQUIRED);
         }
+        request.setUserId(user.getUserId());
         ReservationDto reservationDto = reservationService.makeReservation(request);
 
         return ResponseEntity.ok(MakeReservation.Response.fromDto(reservationDto));
     }
+
+
 
 
 }

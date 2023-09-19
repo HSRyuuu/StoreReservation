@@ -29,6 +29,7 @@ public class ReservationEntity {
 
     @Enumerated(EnumType.STRING)
     private ReservationStatus status;
+    private LocalDateTime statusUpdatedAt;
 
     private LocalDateTime time;
 }

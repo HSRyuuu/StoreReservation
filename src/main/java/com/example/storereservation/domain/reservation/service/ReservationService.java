@@ -13,6 +13,7 @@ import com.example.storereservation.global.exception.ErrorCode;
 import com.example.storereservation.global.exception.MyException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -25,12 +26,18 @@ public class ReservationService {
     private final UserRepository userRepository;
     private final StoreRepository storeRepository;
 
+    /**
+     * 매장 예약
+     * @param request : userId, storeName, people(인원 수)
+     * @return
+     */
     public ReservationDto makeReservation(MakeReservation.Request request){
         ReservationEntity reservation = makeReservationEntity(request);
         ReservationEntity saved = reservationRepository.save(reservation);
         log.info("reservation id : {}", saved.getId());
         return ReservationDto.fromEntity(reservation);
     }
+
     private ReservationEntity makeReservationEntity(MakeReservation.Request request){
         UserEntity user = userRepository.findByUserId(request.getUserId())
                 .orElseThrow(() -> new MyException(ErrorCode.USER_NOT_FOUND));
@@ -45,8 +52,38 @@ public class ReservationService {
                 .storeName(store.getStoreName())
                 .people(request.getPeople())
                 .status(ReservationStatus.REQUESTING)
+                .statusUpdatedAt(LocalDateTime.now())
                 .time(reservationTime)
                 .build();
-
     }
+
+    /**
+     * 예약 상세 정보
+     */
+    public ReservationDto reservationDetail(Long id, String username){
+        ReservationEntity reservation = reservationRepository.findById(id)
+                .orElseThrow(() -> new MyException(ErrorCode.RESERVATION_NOT_FOUND));
+
+        if (!this.validateReservationAccessAuthority(username, reservation)) {
+            throw new MyException(ErrorCode.ACCESS_DENIED);
+        }
+
+        return ReservationDto.fromEntity(reservation);
+    }
+
+    /**
+     * userDetails의 username이 reservationDto의 userId 또는 partnerId와 일치하는지 확인
+     */
+    private boolean validateReservationAccessAuthority(String username, ReservationEntity reservation) {
+        if (reservation.getUserId().equals(username)) {
+            log.info("UserID : {}, 예약 내역 확인", username);
+            return true;
+        } else if (reservation.getPartnerId().equals(username)) {
+            log.info("PartnerId : {}, 예약 내역 확인", username);
+            return true;
+        }
+        return false;
+    }
+
+
 }

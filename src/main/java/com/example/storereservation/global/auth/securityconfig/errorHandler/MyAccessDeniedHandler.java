@@ -1,4 +1,4 @@
-package com.example.storereservation.global.auth.sercurity.errorHandler;
+package com.example.storereservation.global.auth.securityconfig.errorHandler;
 
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;

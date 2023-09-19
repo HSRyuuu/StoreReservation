@@ -14,6 +14,10 @@ public enum ReservationStatus {
      */
     CONFIRM,
     /**
+     * 도착 확인
+     */
+    ARRIVED,
+    /**
      * 이용 완료
      */
     USE_COMPLETE,

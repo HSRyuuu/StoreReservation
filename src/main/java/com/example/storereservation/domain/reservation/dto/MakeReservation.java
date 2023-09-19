@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -38,7 +40,11 @@ public class MakeReservation {
         private String storeName;
 
         private Integer people;
+
+        @Enumerated(EnumType.STRING)
         private ReservationStatus status;
+        private LocalDateTime statusUpdatedAt;
+
 
         private LocalDateTime time;
 
@@ -49,6 +55,7 @@ public class MakeReservation {
                     .storeName(reservationDto.getStoreName())
                     .people(reservationDto.getPeople())
                     .status(reservationDto.getStatus())
+                    .statusUpdatedAt(LocalDateTime.now())
                     .time(reservationDto.getTime())
                     .build();
         }

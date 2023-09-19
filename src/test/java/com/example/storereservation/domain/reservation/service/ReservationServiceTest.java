@@ -15,8 +15,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
-import static com.example.storereservation.testsetting.TestConst.TEST_STORE_NAME;
-import static com.example.storereservation.testsetting.TestConst.TEST_USER_ID;
+import static com.example.storereservation.testsetting.TestConst.*;
+import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
@@ -82,6 +82,80 @@ class ReservationServiceTest {
             reservationService.makeReservation(request);
         }catch(MyException e){
             assertThat(e.getErrorCode()).isEqualTo(ErrorCode.STORE_NOT_FOUND);
+        }
+    }
+
+    @Test
+    @DisplayName("reservationDetail_성공")
+    void reservationDetail() {
+        //given
+        MakeReservation.Request request = MakeReservation.Request.builder()
+                .userId(TEST_USER_ID)
+                .storeName(TEST_STORE_NAME)
+                .people(4)
+                .date(LocalDate.now())
+                .time(LocalTime.now())
+                .build();
+        ReservationDto saved = reservationService.makeReservation(request);
+        Long id = saved.getId();
+
+        //when
+        ReservationDto find1 = reservationService.reservationDetail(id, TEST_USER_ID); //유저 로그인
+        ReservationDto find2 = reservationService.reservationDetail(id, TEST_PARTNER_ID); //파트너 로그인
+
+        //then
+        assertThat(find1.getUserId()).isEqualTo(saved.getUserId());
+        assertThat(find1.getStoreName()).isEqualTo(saved.getStoreName());
+        assertThat(find1.getPeople()).isEqualTo(saved.getPeople());
+
+        assertThat(find1.getUserId()).isEqualTo(saved.getUserId());
+        assertThat(find1.getStoreName()).isEqualTo(saved.getStoreName());
+        assertThat(find1.getPeople()).isEqualTo(saved.getPeople());
+
+    }
+
+    @Test
+    @DisplayName("reservationDetail_예약이 존재하지 않음")
+    void reservationDetail_RESERVATION_NOT_FOUND() {
+        //given
+        MakeReservation.Request request = MakeReservation.Request.builder()
+                .userId(TEST_USER_ID)
+                .storeName(TEST_STORE_NAME)
+                .people(4)
+                .date(LocalDate.now())
+                .time(LocalTime.now())
+                .build();
+        ReservationDto saved = reservationService.makeReservation(request);
+        Long id = saved.getId();
+
+        //when
+        //then
+        try{
+            reservationService.reservationDetail((long)Integer.MAX_VALUE, TEST_USER_ID);
+        }catch(MyException e){
+            assertThat(e.getErrorCode()).isEqualTo(ErrorCode.RESERVATION_NOT_FOUND);
+        }
+    }
+    @Test
+    @DisplayName("reservationDetail_예약 접근 권한 없음")
+    void reservationDetail_ACCESS_DENIED() {
+        //given
+        MakeReservation.Request request = MakeReservation.Request.builder()
+                .userId(TEST_USER_ID)
+                .storeName(TEST_STORE_NAME)
+                .people(4)
+                .date(LocalDate.now())
+                .time(LocalTime.now())
+                .build();
+        ReservationDto saved = reservationService.makeReservation(request);
+        Long id = saved.getId();
+
+        //when
+        //then
+        try{
+            reservationService.reservationDetail(id, "asdfsadf");
+        }catch(MyException e){
+            assertThat(e.getErrorCode()).isEqualTo(ErrorCode.ACCESS_DENIED);
         }
     }
 }

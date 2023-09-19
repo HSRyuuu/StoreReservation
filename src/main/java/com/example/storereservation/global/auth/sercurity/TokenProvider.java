@@ -29,7 +29,7 @@ public class TokenProvider {
     private String secretKey;
 
     private static final String KEY_ROLES = "roles";
-    private static final long TOKEN_EXPIRE_TIME = 1000 * 60 * 60; //1시간
+    private static final long TOKEN_EXPIRE_TIME = 1000 * 60 * 10; //10분
     private final AuthService authService;
 
     /**

@@ -42,7 +42,7 @@ public class AuthService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) {
-        log.info("ID : {}", username);
+        log.info("Load User => USERID : {}", username);
         if (userRepository.existsByUserId(username)) {
             return userRepository.findByUserId(username)
                     .orElseThrow(() -> new MyException(ErrorCode.USER_NOT_FOUND));
