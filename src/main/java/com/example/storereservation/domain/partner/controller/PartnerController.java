@@ -4,11 +4,14 @@ import com.example.storereservation.domain.partner.dto.AddStore;
 import com.example.storereservation.domain.partner.dto.EditStore;
 import com.example.storereservation.domain.partner.persist.PartnerEntity;
 import com.example.storereservation.domain.partner.service.PartnerService;
+import com.example.storereservation.domain.reservation.dto.ReservationDto;
+import com.example.storereservation.domain.reservation.service.ReservationService;
 import com.example.storereservation.domain.store.dto.StoreDto;
 import com.example.storereservation.global.exception.ErrorCode;
 import com.example.storereservation.global.exception.MyException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 public class PartnerController {
 
     private final PartnerService partnerService;
+    private final ReservationService reservationService;
 
 
     /**
@@ -49,15 +53,17 @@ public class PartnerController {
         return ResponseEntity.ok(EditStore.Response.fromDto(storeDto));
     }
 
-//    /**
-//     * 예약 요청 내역확인
-//     */
-//    @GetMapping("/reservation/store/{storeId}")
-//    public ResponseEntity<?> checkReservationRequest(@PathVariable String storeId){
-//
-//        return ResponseEntity.ok(null);
-//    }
-//
+    /**
+     * 예약 내역 모두 보기 (partner)
+     */
+    @GetMapping("/partner/reservation/list")
+    public ResponseEntity<?> reservationListForPartner(@RequestParam(value = "p", defaultValue = "1") Integer page,
+                                                       @AuthenticationPrincipal PartnerEntity partner){
+        Page<ReservationDto> reservationList = reservationService.getListForPartner(partner.getPartnerId(), page - 1);
+
+        return ResponseEntity.ok(reservationList);
+    }
+
 //    /**
 //     * 예약 요청 승인 or 거절 처리
 //     */

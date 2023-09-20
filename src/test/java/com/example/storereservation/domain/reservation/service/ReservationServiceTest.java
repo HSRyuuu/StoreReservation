@@ -9,6 +9,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
@@ -16,7 +17,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import static com.example.storereservation.testsetting.TestConst.*;
-import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
@@ -60,12 +60,13 @@ class ReservationServiceTest {
                 .time(LocalTime.now())
                 .build();
         //when
-        try{
+        try {
             reservationService.makeReservation(request);
-        }catch(MyException e){
+        } catch (MyException e) {
             assertThat(e.getErrorCode()).isEqualTo(ErrorCode.USER_NOT_FOUND);
         }
     }
+
     @Test
     @DisplayName("예약_STORE_NOT_FOUND")
     void makeReservation_STORE_NOT_FOUND() {
@@ -78,9 +79,9 @@ class ReservationServiceTest {
                 .time(LocalTime.now())
                 .build();
         //when
-        try{
+        try {
             reservationService.makeReservation(request);
-        }catch(MyException e){
+        } catch (MyException e) {
             assertThat(e.getErrorCode()).isEqualTo(ErrorCode.STORE_NOT_FOUND);
         }
     }
@@ -130,12 +131,13 @@ class ReservationServiceTest {
 
         //when
         //then
-        try{
-            reservationService.reservationDetail((long)Integer.MAX_VALUE, TEST_USER_ID);
-        }catch(MyException e){
+        try {
+            reservationService.reservationDetail((long) Integer.MAX_VALUE, TEST_USER_ID);
+        } catch (MyException e) {
             assertThat(e.getErrorCode()).isEqualTo(ErrorCode.RESERVATION_NOT_FOUND);
         }
     }
+
     @Test
     @DisplayName("!!!예약 상세_예약 접근 권한 없음")
     void reservationDetail_ACCESS_DENIED() {
@@ -152,10 +154,43 @@ class ReservationServiceTest {
 
         //when
         //then
-        try{
+        try {
             reservationService.reservationDetail(id, "asdfsadf");
-        }catch(MyException e){
+        } catch (MyException e) {
             assertThat(e.getErrorCode()).isEqualTo(ErrorCode.ACCESS_DENIED);
         }
+    }
+
+    @Test
+    @DisplayName("파트너_예약 내역 확인")
+    void getListForPartner() {
+        //given
+        String partnerId = TEST_PARTNER_ID;
+        Integer page = 0; // 컨트롤러에서 -1 해줘서 service에서는 0부터 시작
+        //when
+        Page<ReservationDto> list = reservationService.getListForPartner(partnerId, page);
+
+        //then
+        for (ReservationDto reservationDto : list) {
+            assertThat(reservationDto.getPartnerId()).isEqualTo(partnerId);
+        }
+    }
+    @Test
+    @DisplayName("!!!파트너_예약 내역 확인_예약 내역 없음")
+    void getListForPartner_RESERVATION_NOT_FOUND() {
+        //given
+        String partnerId = TEST_PARTNER_ID;
+        Integer page = Integer.MAX_VALUE; // 컨트롤러에서 -1 해줘서 service에서는 0부터 시작
+        //when
+        //then
+        try{
+            reservationService.getListForPartner(partnerId, page);
+        }catch(MyException e){
+            assertThat(e.getErrorCode()).isEqualTo(ErrorCode.RESERVATION_NOT_FOUND);
+        }
+
+
+
+
     }
 }

@@ -3,7 +3,7 @@ package com.example.storereservation.domain.store.controller;
 import com.example.storereservation.domain.store.dto.ListQueryInput;
 import com.example.storereservation.domain.store.dto.StoreDetail;
 import com.example.storereservation.domain.store.service.StoreService;
-import com.example.storereservation.domain.store.type.SortType;
+import com.example.storereservation.global.type.StoreSortType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -28,7 +28,7 @@ public class StoreController {
         Page<StoreDetail> findStores =
                 storeService.getStoreListByStoreName(
                         input.getStoreName(),
-                        SortType.valueOf(input.getSortType()),
+                        StoreSortType.valueOf(input.getSortType()),
                         page - 1);
 
 

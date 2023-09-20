@@ -22,6 +22,8 @@ public class ReservationController {
     private final ReservationService reservationService;
 
     /**
+     * 예약 상세정보 보기
+     * - @AuthenticationPricipal로 로그인 된 유저 정보를 받아서 유저 or 파트너에게 정보 주기
      * @param reservationId
      * @param userDetails : 로그인 정보
      * @return
@@ -35,24 +37,17 @@ public class ReservationController {
         return ResponseEntity.ok(reservationDto);
     }
 
-
-    /**
-     * 예약 내역 모두 보기 (user)
-     */
-    @GetMapping("/user/reservation/list")
-    public ResponseEntity<?> reservationListForUser(@AuthenticationPrincipal UserEntity user){
-
-        return ResponseEntity.ok(null);
-    }
-
+//
 //    /**
-//     * 예약 내역 모두 보기 (manager)
+//     * 예약 내역 모두 보기 (user)
 //     */
-//    @GetMapping("/manager/reservation/list")
-//    public ResponseEntity<?> reservationListForManager(){
+//    @GetMapping("/user/reservation/list")
+//    public ResponseEntity<?> reservationListForUser(@AuthenticationPrincipal UserEntity user){
 //
 //        return ResponseEntity.ok(null);
 //    }
+
+
 
 
 }

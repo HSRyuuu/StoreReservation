@@ -11,8 +11,11 @@ import com.example.storereservation.domain.user.persist.UserEntity;
 import com.example.storereservation.domain.user.persist.UserRepository;
 import com.example.storereservation.global.exception.ErrorCode;
 import com.example.storereservation.global.exception.MyException;
+import com.example.storereservation.global.type.PageConst;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +41,9 @@ public class ReservationService {
         return ReservationDto.fromEntity(reservation);
     }
 
+    /**
+     * 매장 예약 Request를 바탕으로 ReservationEntity 생성
+     */
     private ReservationEntity makeReservationEntity(MakeReservation.Request request){
         UserEntity user = userRepository.findByUserId(request.getUserId())
                 .orElseThrow(() -> new MyException(ErrorCode.USER_NOT_FOUND));
@@ -84,6 +90,24 @@ public class ReservationService {
         }
         return false;
     }
+
+    /**
+     * partner ID로 예약 내역 확인
+     * @param partnerId
+     * @param page
+     * sort : 시간 빠른 순
+     * @return
+     */
+    public Page<ReservationDto> getListForPartner(String partnerId, Integer page){
+        PageRequest pageRequest = PageRequest.of(page, PageConst.RESERVATION_LIST_PAGE_SIZE);
+        Page<ReservationEntity> reservations =
+                reservationRepository.findByPartnerIdOrderByTime(partnerId, pageRequest);
+        if(reservations.getSize() == 0){
+            throw new MyException(ErrorCode.RESERVATION_IS_ZERO);
+        }
+        return reservations.map(reservation -> ReservationDto.fromEntity(reservation));
+    }
+
 
 
 }

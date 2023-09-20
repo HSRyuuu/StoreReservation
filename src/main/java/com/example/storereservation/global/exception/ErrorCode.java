@@ -23,10 +23,13 @@ public enum ErrorCode {
     PARTNER_ALREADY_HAS_STORE(HttpStatus.CONFLICT.value(), "해당 파트너의 매장이 이미 존재합니다."),
     STORE_NAME_ALREADY_EXISTS(HttpStatus.CONFLICT.value(), "해당 매장 명이 이미 존재합니다."),
     STORE_NOT_FOUND(HttpStatus.CONFLICT.value(), "해당 매장이 존재하지 않습니다."),
+    STORE_NO_SEARCH_RESULT(HttpStatus.CONFLICT.value(), "검색 결과가 없습니다."),
     STORE_PARTNER_NOT_MATCH(HttpStatus.FORBIDDEN.value(), "해당 파트너의 매장이 아닙니다."),
 
     //RESERVATION 관련
     RESERVATION_NOT_FOUND(HttpStatus.BAD_REQUEST.value(), "예약 정보를 찾을 수 없습니다."),
+    RESERVATION_IS_ZERO(HttpStatus.BAD_REQUEST.value(), "예약 내역이 없습니다."),
+
 
 
 
