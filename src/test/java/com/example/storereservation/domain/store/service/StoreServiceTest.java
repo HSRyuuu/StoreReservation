@@ -1,9 +1,8 @@
 package com.example.storereservation.domain.store.service;
 
+import com.example.storereservation.domain.partner.dto.AddStore;
 import com.example.storereservation.domain.partner.dto.RegisterPartner;
 import com.example.storereservation.domain.partner.service.PartnerService;
-import com.example.storereservation.domain.partner.service.PartnerStoreService;
-import com.example.storereservation.domain.partner.dto.AddStore;
 import com.example.storereservation.domain.store.dto.StoreDetail;
 import com.example.storereservation.global.exception.ErrorCode;
 import com.example.storereservation.global.exception.MyException;
@@ -16,7 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.transaction.Transactional;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
 @SpringBootTest
@@ -27,8 +26,6 @@ class StoreServiceTest {
     StoreService storeService;
     @Autowired
     PartnerService partnerService;
-    @Autowired
-    PartnerStoreService partnerStoreService;
 
     private static final String PARTNER_ID =  "tPartnerId";
     private static final String STORE_NAME =  "tStoreName";
@@ -50,7 +47,7 @@ class StoreServiceTest {
                 .storeAddr("tStoreAddr")
                 .text("test text")
                 .build();
-        partnerStoreService.addStore(PARTNER_ID, request);
+        partnerService.addStore(PARTNER_ID, request);
     }
 
     @Test

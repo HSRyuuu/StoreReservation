@@ -21,15 +21,15 @@ public class ReservationController {
     private final ReservationService reservationService;
 
     /**
-     * @param id : reservationId
+     * @param reservationId
      * @param userDetails : 로그인 정보
      * @return
      */
-    @GetMapping("/reservation/detail/{id}")
-    public ResponseEntity<?> reservationDetail(@PathVariable Long id,
+    @GetMapping("/reservation/detail/{reservationId}")
+    public ResponseEntity<?> reservationDetail(@PathVariable() Long reservationId,
                                                @AuthenticationPrincipal UserDetails userDetails) {
         ReservationDto reservationDto =
-                reservationService.reservationDetail(id, userDetails.getUsername());
+                reservationService.reservationDetail(reservationId, userDetails.getUsername());
 
         return ResponseEntity.ok(reservationDto);
     }
