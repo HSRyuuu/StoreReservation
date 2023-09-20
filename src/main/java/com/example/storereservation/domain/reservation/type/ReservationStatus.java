@@ -28,7 +28,11 @@ public enum ReservationStatus {
     /**
      * 예약 승인 후 이용하지 않음(no-show)
      */
-    NO_SHOW;
+    NO_SHOW,
+    /**
+     * 테스트용
+     */
+    T_E_S_T;
 
     public static ReservationStatus of(String status){
         status = status.toUpperCase();

@@ -56,7 +56,7 @@ public class PartnerController {
     }
 
     /**
-     * 예약 내역 모두 보기 (partner)
+     * 예약 내역 모두 보기
      */
     @GetMapping("/partner/reservation/list")
     public ResponseEntity<?> reservationListForPartner(@RequestParam(value = "p", defaultValue = "1") Integer page,
@@ -66,6 +66,13 @@ public class PartnerController {
         return ResponseEntity.ok(reservationList);
     }
 
+    /**
+     * 상태 = status 인 예약 내역 모두 보기
+     * @param status
+     * @param page
+     * @param partner
+     * @return
+     */
     @GetMapping("/partner/reservation/list/{status}")
     public ResponseEntity<?> reservationListForPartnerByStatus(@PathVariable String status,
                                                                        @RequestParam(value = "p", defaultValue = "1") Integer page,
@@ -80,7 +87,7 @@ public class PartnerController {
     public ResponseEntity<?> changeReservationStatus(@PathVariable("reservationId") Long id,
                                                      @RequestBody ChangeReservationInput input,
                                                      @AuthenticationPrincipal PartnerEntity partner){
-        reservationService.changeReservationStatus(id, ReservationStatus.of(input.getStatus()), partner.getPartnerId());
+        reservationService.changeReservationStatus(partner.getPartnerId(), id, ReservationStatus.of(input.getStatus()));
 
         return ResponseEntity.ok(reservationService.reservationDetail(id, partner.getPartnerId()));
     }

@@ -109,6 +109,24 @@ public class ReservationService {
         }
         return reservations.map(reservation -> ReservationDto.fromEntity(reservation));
     }
+
+    /**
+     * 예약 상태 변경 - 파트너
+     * @param id
+     * @param status
+     * @param partnerId
+     */
+    public void changeReservationStatus(String partnerId, Long id, ReservationStatus status){
+        ReservationEntity reservation = reservationRepository.findById(id)
+                .orElseThrow(() -> new MyException(ErrorCode.RESERVATION_NOT_FOUND));
+
+        if(!reservation.getPartnerId().equals(partnerId)){
+            throw new MyException(ErrorCode.RESERVATION_UPDATE_AUTH_FAIL);
+        }
+        reservation.setStatus(status);
+        reservationRepository.save(reservation);
+    }
+
     /**
      * partner ID와 ReservationStatus로 내역 확인
      * @param partnerId
@@ -131,15 +149,6 @@ public class ReservationService {
         return reservations.map(reservation -> ReservationDto.fromEntity(reservation));
     }
 
-    public void changeReservationStatus(Long id, ReservationStatus status, String partnerId){
-        ReservationEntity reservation = reservationRepository.findById(id)
-                .orElseThrow(() -> new MyException(ErrorCode.RESERVATION_NOT_FOUND));
 
-        if(!reservation.getPartnerId().equals(partnerId)){
-            throw new MyException(ErrorCode.RESERVATION_UPDATE_AUTH_FAIL);
-        }
-        reservation.setStatus(status);
-        reservationRepository.save(reservation);
-    }
 
 }
