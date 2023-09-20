@@ -1,10 +1,7 @@
 package com.example.storereservation.domain.reservation.persist;
 
 import com.example.storereservation.domain.reservation.type.ReservationStatus;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -27,6 +24,7 @@ public class ReservationEntity {
 
     private Integer people;
 
+    @Setter
     @Enumerated(EnumType.STRING)
     private ReservationStatus status;
     private LocalDateTime statusUpdatedAt;

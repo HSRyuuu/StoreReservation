@@ -4,8 +4,10 @@ import com.example.storereservation.domain.partner.dto.AddStore;
 import com.example.storereservation.domain.partner.dto.EditStore;
 import com.example.storereservation.domain.partner.persist.PartnerEntity;
 import com.example.storereservation.domain.partner.service.PartnerService;
+import com.example.storereservation.domain.reservation.dto.ChangeReservationInput;
 import com.example.storereservation.domain.reservation.dto.ReservationDto;
 import com.example.storereservation.domain.reservation.service.ReservationService;
+import com.example.storereservation.domain.reservation.type.ReservationStatus;
 import com.example.storereservation.domain.store.dto.StoreDto;
 import com.example.storereservation.global.exception.ErrorCode;
 import com.example.storereservation.global.exception.MyException;
@@ -59,28 +61,28 @@ public class PartnerController {
     @GetMapping("/partner/reservation/list")
     public ResponseEntity<?> reservationListForPartner(@RequestParam(value = "p", defaultValue = "1") Integer page,
                                                        @AuthenticationPrincipal PartnerEntity partner){
-        Page<ReservationDto> reservationList = reservationService.getListForPartner(partner.getPartnerId(), page - 1);
+        Page<ReservationDto> reservationList = reservationService.listForPartner(partner.getPartnerId(), page - 1);
 
         return ResponseEntity.ok(reservationList);
     }
 
-//    /**
-//     * 예약 요청 승인 or 거절 처리
-//     */
-//    @PostMapping("/reservation/manager/{reservationId}")
-//    public ResponseEntity<?> responseReservation(@PathVariable Long reservationId){
-//
-//        return ResponseEntity.ok(null);
-//    }
-//
-//    /**
-//     * 내 상점 정보 입력
-//     */
-//    @PostMapping("/store/register")
-//    public ResponseEntity<?> registerStore(){
-//
-//        return ResponseEntity.ok(null);
-//    }
+    @GetMapping("/partner/reservation/list/{status}")
+    public ResponseEntity<?> reservationListForPartnerByStatus(@PathVariable String status,
+                                                                       @RequestParam(value = "p", defaultValue = "1") Integer page,
+                                                                       @AuthenticationPrincipal PartnerEntity partner){
+        Page<ReservationDto> reservationList = reservationService.listForPartnerByStatus(
+                partner.getPartnerId(), page - 1, ReservationStatus.of(status));
 
+        return ResponseEntity.ok(reservationList);
+    }
+
+    @PutMapping("/partner/reservation/{reservationId}")
+    public ResponseEntity<?> changeReservationStatus(@PathVariable("reservationId") Long id,
+                                                     @RequestBody ChangeReservationInput input,
+                                                     @AuthenticationPrincipal PartnerEntity partner){
+        reservationService.changeReservationStatus(id, ReservationStatus.of(input.getStatus()), partner.getPartnerId());
+
+        return ResponseEntity.ok(reservationService.reservationDetail(id, partner.getPartnerId()));
+    }
 
 }

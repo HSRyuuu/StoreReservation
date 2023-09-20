@@ -29,10 +29,11 @@ public enum ErrorCode {
     //RESERVATION 관련
     RESERVATION_NOT_FOUND(HttpStatus.BAD_REQUEST.value(), "예약 정보를 찾을 수 없습니다."),
     RESERVATION_IS_ZERO(HttpStatus.BAD_REQUEST.value(), "예약 내역이 없습니다."),
-
-
-
-
+    RESERVATION_STATUS_CODE_REQUIRED(HttpStatus.BAD_REQUEST.value(), "예약 상태 코드가 필요합니다." +
+            " (REQUESTING, REFUSED, CONFIRM, ARRIVED, USE_COMPLETE, NO_SHOW)"),
+    RESERVATION_STATUS_CODE_ILLEGAL_ARGUMENT(HttpStatus.BAD_REQUEST.value(), "해당 상태코드가 존재하지 않습니다." +
+            " (REQUESTING, REFUSED, CONFIRM, ARRIVED, USE_COMPLETE, NO_SHOW)"),
+    RESERVATION_UPDATE_AUTH_FAIL(HttpStatus.BAD_REQUEST.value(), "해당 파트너는 해당 예약에 대한 변경 권한이 없습니다."),
 
     //Security
     TOKEN_TIME_OUT(HttpStatus.CONFLICT.value(), "토큰이 만료되었습니다."),

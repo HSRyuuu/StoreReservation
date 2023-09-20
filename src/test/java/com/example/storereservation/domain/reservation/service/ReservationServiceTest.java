@@ -163,12 +163,12 @@ class ReservationServiceTest {
 
     @Test
     @DisplayName("파트너_예약 내역 확인")
-    void getListForPartner() {
+    void listForPartner() {
         //given
         String partnerId = TEST_PARTNER_ID;
         Integer page = 0; // 컨트롤러에서 -1 해줘서 service에서는 0부터 시작
         //when
-        Page<ReservationDto> list = reservationService.getListForPartner(partnerId, page);
+        Page<ReservationDto> list = reservationService.listForPartner(partnerId, page);
 
         //then
         for (ReservationDto reservationDto : list) {
@@ -177,20 +177,34 @@ class ReservationServiceTest {
     }
     @Test
     @DisplayName("!!!파트너_예약 내역 확인_예약 내역 없음")
-    void getListForPartner_RESERVATION_NOT_FOUND() {
+    void listForPartner_RESERVATION_NOT_FOUND() {
         //given
         String partnerId = TEST_PARTNER_ID;
         Integer page = Integer.MAX_VALUE; // 컨트롤러에서 -1 해줘서 service에서는 0부터 시작
         //when
         //then
         try{
-            reservationService.getListForPartner(partnerId, page);
+            reservationService.listForPartner(partnerId, page);
         }catch(MyException e){
             assertThat(e.getErrorCode()).isEqualTo(ErrorCode.RESERVATION_NOT_FOUND);
         }
+    }
 
+    @Test
+    void listForPartnerByStatus() {
+        //given
+        MakeReservation.Request request = MakeReservation.Request.builder()
+                .userId(TEST_USER_ID)
+                .storeName(TEST_STORE_NAME)
+                .people(4)
+                .date(LocalDate.now())
+                .time(LocalTime.now())
+                .build();
+        reservationService.makeReservation(request);
+        reservationService.makeReservation(request);
+        //when
 
-
+        //then
 
     }
 }

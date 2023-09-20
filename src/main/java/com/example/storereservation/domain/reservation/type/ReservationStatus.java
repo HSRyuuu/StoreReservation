@@ -1,5 +1,9 @@
 package com.example.storereservation.domain.reservation.type;
 
+import com.example.storereservation.global.exception.ErrorCode;
+import com.example.storereservation.global.exception.MyException;
+import org.springframework.util.StringUtils;
+
 public enum ReservationStatus {
     /**
      * 예약 요청 중
@@ -24,5 +28,20 @@ public enum ReservationStatus {
     /**
      * 예약 승인 후 이용하지 않음(no-show)
      */
-    NO_SHOW
+    NO_SHOW;
+
+    public static ReservationStatus of(String status){
+        status = status.toUpperCase();
+        if(!StringUtils.hasText(status)){
+            throw new MyException(ErrorCode.RESERVATION_STATUS_CODE_REQUIRED);
+        }
+        for(ReservationStatus rs : ReservationStatus.values()){
+            if(rs.toString().equals(status)){
+                return rs;
+            }
+        }
+
+        throw new MyException(ErrorCode.RESERVATION_STATUS_CODE_ILLEGAL_ARGUMENT);
+
+    }
 }

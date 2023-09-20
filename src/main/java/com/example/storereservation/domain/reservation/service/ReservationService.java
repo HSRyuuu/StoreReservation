@@ -16,7 +16,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -98,16 +97,49 @@ public class ReservationService {
      * sort : 시간 빠른 순
      * @return
      */
-    public Page<ReservationDto> getListForPartner(String partnerId, Integer page){
-        PageRequest pageRequest = PageRequest.of(page, PageConst.RESERVATION_LIST_PAGE_SIZE);
+    public Page<ReservationDto> listForPartner(String partnerId, Integer page){
         Page<ReservationEntity> reservations =
-                reservationRepository.findByPartnerIdOrderByTime(partnerId, pageRequest);
+                reservationRepository.findByPartnerIdOrderByTime(
+                        partnerId,
+                        PageRequest.of(page, PageConst.RESERVATION_LIST_PAGE_SIZE)
+                );
+
+        if(reservations.getSize() == 0){
+            throw new MyException(ErrorCode.RESERVATION_IS_ZERO);
+        }
+        return reservations.map(reservation -> ReservationDto.fromEntity(reservation));
+    }
+    /**
+     * partner ID와 ReservationStatus로 내역 확인
+     * @param partnerId
+     * @param page
+     * sort : 시간 빠른 순
+     * @return
+     */
+    public Page<ReservationDto> listForPartnerByStatus(String partnerId, Integer page, ReservationStatus status){
+
+        Page<ReservationEntity> reservations =
+                reservationRepository.findByPartnerIdAndStatusOrderByTime(
+                        partnerId,
+                        status,
+                        PageRequest.of(page, PageConst.RESERVATION_LIST_PAGE_SIZE)
+                );
+
         if(reservations.getSize() == 0){
             throw new MyException(ErrorCode.RESERVATION_IS_ZERO);
         }
         return reservations.map(reservation -> ReservationDto.fromEntity(reservation));
     }
 
+    public void changeReservationStatus(Long id, ReservationStatus status, String partnerId){
+        ReservationEntity reservation = reservationRepository.findById(id)
+                .orElseThrow(() -> new MyException(ErrorCode.RESERVATION_NOT_FOUND));
 
+        if(!reservation.getPartnerId().equals(partnerId)){
+            throw new MyException(ErrorCode.RESERVATION_UPDATE_AUTH_FAIL);
+        }
+        reservation.setStatus(status);
+        reservationRepository.save(reservation);
+    }
 
 }

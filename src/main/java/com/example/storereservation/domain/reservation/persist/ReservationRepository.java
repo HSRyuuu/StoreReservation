@@ -1,5 +1,6 @@
 package com.example.storereservation.domain.reservation.persist;
 
+import com.example.storereservation.domain.reservation.type.ReservationStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,4 +12,5 @@ import java.util.List;
 public interface ReservationRepository extends JpaRepository<ReservationEntity, Long> {
     List<ReservationEntity> findByUserIdOrderByTime(String userId);
     Page<ReservationEntity> findByPartnerIdOrderByTime(String partnerId, Pageable pageable);
+    Page<ReservationEntity> findByPartnerIdAndStatusOrderByTime(String partnerId, ReservationStatus status, Pageable pageable);
 }
