@@ -3,6 +3,7 @@ package com.example.storereservation.global.auth.securityconfig;
 import com.example.storereservation.global.auth.sercurity.AuthenticationFilter;
 import com.example.storereservation.global.auth.securityconfig.errorHandler.MyAccessDeniedHandler;
 import com.example.storereservation.global.auth.securityconfig.errorHandler.MyAuthenticationEntryPoint;
+import com.example.storereservation.global.auth.sercurity.JwtExceptionFilter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -30,6 +31,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final Environment environment;
     private final AuthenticationFilter authenticationFilter;
+    private final JwtExceptionFilter jwtExceptionFilter;
 
     private final MyAccessDeniedHandler myAccessDeniedHandler;
     private final MyAuthenticationEntryPoint myAuthenticationEntryPoint;
@@ -49,12 +51,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                         .authenticationEntryPoint(myAuthenticationEntryPoint)
                         .accessDeniedHandler(myAccessDeniedHandler)
                 .and()
-                    .logout()
-                        .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                        .logoutSuccessUrl("/logout/success")
-                        .invalidateHttpSession(true)
-                .and()
-                    .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                    .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtExceptionFilter, AuthenticationFilter.class);
 
         // 개발용
         if(Arrays.asList(environment.getActiveProfiles()).contains("dev")){

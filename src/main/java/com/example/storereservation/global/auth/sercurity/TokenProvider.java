@@ -2,11 +2,7 @@ package com.example.storereservation.global.auth.sercurity;
 
 import com.example.storereservation.global.auth.service.AuthService;
 import com.example.storereservation.global.exception.ErrorCode;
-import com.example.storereservation.global.exception.MyException;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -65,19 +61,26 @@ public class TokenProvider {
      * true : 유효  false : 유효하지 않음
      */
     public boolean validateToken(String token) {
-        if (!StringUtils.hasText(token)) return false;
-        Claims claims = this.parseClaims(token);
-        return !claims.getExpiration().before(new Date());
+        try{
+            if (!StringUtils.hasText(token)) return false;
+            Claims claims = this.parseClaims(token);
+            return !claims.getExpiration().before(new Date());
+        }catch (JwtException e){
+            throw new JwtException(e.getMessage());
+        }
+
     }
 
     /**
      * 토큰이 유효한지 확인
      */
-    private Claims parseClaims(String token) {
-        try {
+    private Claims parseClaims(String token){
+        try{
             return Jwts.parser().setSigningKey(this.secretKey).parseClaimsJws(token).getBody();
-        } catch (ExpiredJwtException e) {
-            throw new MyException(ErrorCode.TOKEN_TIME_OUT);
+        }catch (ExpiredJwtException e) {
+            throw new JwtException(ErrorCode.TOKEN_TIME_OUT.getDescription());
+        }catch (SignatureException e){
+            throw new JwtException(ErrorCode.JWT_TOKEN_WRONG_TYPE.getDescription());
         }
     }
 

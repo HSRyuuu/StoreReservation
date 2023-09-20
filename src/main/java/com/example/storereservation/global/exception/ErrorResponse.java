@@ -12,4 +12,9 @@ public class ErrorResponse {
     private ErrorCode errorCode;
     private String errorMessage;
 
+    public ErrorResponse(ErrorCode errorCode){
+        this.statusCode = errorCode.getStatusCode();;
+        this.errorCode = errorCode;
+        this.errorMessage = errorCode.getDescription();
+    }
 }

@@ -2,6 +2,7 @@ package com.example.storereservation.domain.reservation.controller;
 
 import com.example.storereservation.domain.reservation.dto.ReservationDto;
 import com.example.storereservation.domain.reservation.service.ReservationService;
+import com.example.storereservation.domain.user.persist.UserEntity;
 import com.example.storereservation.global.exception.ErrorCode;
 import com.example.storereservation.global.exception.MyException;
 import lombok.RequiredArgsConstructor;
@@ -35,16 +36,15 @@ public class ReservationController {
     }
 
 
-//
-//    /**
-//     * 예약 내역 모두 보기 (user)
-//     */
-//    @GetMapping("/user/reservation/list")
-//    public ResponseEntity<?> reservationListForUser(){
-//
-//        return ResponseEntity.ok(null);
-//    }
-//
+    /**
+     * 예약 내역 모두 보기 (user)
+     */
+    @GetMapping("/user/reservation/list")
+    public ResponseEntity<?> reservationListForUser(@AuthenticationPrincipal UserEntity user){
+
+        return ResponseEntity.ok(null);
+    }
+
 //    /**
 //     * 예약 내역 모두 보기 (manager)
 //     */
