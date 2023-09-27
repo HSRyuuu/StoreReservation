@@ -18,7 +18,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -94,11 +96,11 @@ public class ReservationService {
      * 파트너 - partner ID로 예약 내역 확인
      * @param partnerId
      * @param page
-     * sort : 시간 빠른 순
+     * sort : 최신순
      */
     public Page<ReservationDto> listForPartner(String partnerId, Integer page){
         Page<ReservationEntity> reservations =
-                reservationRepository.findByPartnerIdOrderByTime(
+                reservationRepository.findByPartnerIdOrderByTimeDesc(
                         partnerId,
                         PageRequest.of(page, PageConst.RESERVATION_LIST_PAGE_SIZE)
                 );
@@ -108,6 +110,67 @@ public class ReservationService {
         }
         return reservations.map(reservation -> ReservationDto.fromEntity(reservation));
     }
+
+    /**
+     * 파트너 - partner ID와 ReservationStatus로 내역 확인
+     * sort : 시간 빠른 순
+     */
+    public Page<ReservationDto> listForPartnerByStatus(String partnerId, ReservationStatus status, Integer page){
+
+        Page<ReservationEntity> reservations =
+                reservationRepository.findByPartnerIdAndStatusOrderByTime(
+                        partnerId,
+                        status,
+                        PageRequest.of(page, PageConst.RESERVATION_LIST_PAGE_SIZE)
+                );
+
+        if(reservations.getSize() == 0){
+            throw new MyException(ErrorCode.RESERVATION_IS_ZERO);
+        }
+        return reservations.map(reservation -> ReservationDto.fromEntity(reservation));
+    }
+
+    /**
+     * 파트너 - partner ID와 예약 날짜로 내역 확인
+     * sort : 시간 빠른 순
+     */
+    public Page<ReservationDto> listForPartnerByDate(String partnerId, LocalDate date, Integer page){
+
+        Page<ReservationEntity> reservations =
+                reservationRepository.findByPartnerIdAndTimeBetweenOrderByTime(
+                        partnerId,
+                        LocalDateTime.of(date, LocalTime.MIN),
+                        LocalDateTime.of(date, LocalTime.MAX),
+                        PageRequest.of(page, PageConst.RESERVATION_LIST_PAGE_SIZE)
+                );
+
+        if(reservations.getSize() == 0){
+            throw new MyException(ErrorCode.RESERVATION_IS_ZERO);
+        }
+        return reservations.map(reservation -> ReservationDto.fromEntity(reservation));
+    }
+
+    /**
+     * 파트너 - partner ID와 예약 상태(status), 예약 날짜(time)로 내역 확인
+     * sort : 시간 빠른 순
+     */
+    public Page<ReservationDto> listForPartnerByStatusAndDate(String partnerId,ReservationStatus status, LocalDate date, Integer page){
+
+        Page<ReservationEntity> reservations =
+                reservationRepository.findByPartnerIdAndStatusAndTimeBetweenOrderByTime(
+                        partnerId,
+                        status,
+                        LocalDateTime.of(date, LocalTime.MIN),
+                        LocalDateTime.of(date, LocalTime.MAX),
+                        PageRequest.of(page, PageConst.RESERVATION_LIST_PAGE_SIZE)
+                );
+
+        if(reservations.getSize() == 0){
+            throw new MyException(ErrorCode.RESERVATION_IS_ZERO);
+        }
+        return reservations.map(reservation -> ReservationDto.fromEntity(reservation));
+    }
+
 
     /**
      * 파트너 - 예약 상태 변경
@@ -126,24 +189,7 @@ public class ReservationService {
         reservationRepository.save(reservation);
     }
 
-    /**
-     * 파트너 - partner ID와 ReservationStatus로 내역 확인
-     * sort : 시간 빠른 순
-     */
-    public Page<ReservationDto> listForPartnerByStatus(String partnerId, Integer page, ReservationStatus status){
 
-        Page<ReservationEntity> reservations =
-                reservationRepository.findByPartnerIdAndStatusOrderByTime(
-                        partnerId,
-                        status,
-                        PageRequest.of(page, PageConst.RESERVATION_LIST_PAGE_SIZE)
-                );
-
-        if(reservations.getSize() == 0){
-            throw new MyException(ErrorCode.RESERVATION_IS_ZERO);
-        }
-        return reservations.map(reservation -> ReservationDto.fromEntity(reservation));
-    }
 
     /**
      * 유저 - user ID로 예약 내역 확인

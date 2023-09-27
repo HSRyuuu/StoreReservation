@@ -1,16 +1,12 @@
 package com.example.storereservation.domain.reservation.service;
 
-import com.example.storereservation.domain.partner.dto.AddStore;
-import com.example.storereservation.domain.partner.dto.RegisterPartner;
 import com.example.storereservation.domain.partner.service.PartnerService;
 import com.example.storereservation.domain.reservation.dto.MakeReservation;
 import com.example.storereservation.domain.reservation.dto.ReservationDto;
 import com.example.storereservation.domain.reservation.type.ReservationStatus;
-import com.example.storereservation.domain.store.dto.StoreDto;
 import com.example.storereservation.global.exception.ErrorCode;
 import com.example.storereservation.global.exception.MyException;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +51,6 @@ class ReservationServiceTest {
         assertThat(reservation.getPeople()).isEqualTo(4);
         assertThat(reservation.getTime().getDayOfMonth()).isEqualTo(LocalDateTime.now().getDayOfMonth());
     }
-
     @Test
     @DisplayName("!!!예약_USER_NOT_FOUND")
     void makeReservation_USER_NOT_FOUND() {
@@ -74,7 +69,6 @@ class ReservationServiceTest {
             assertThat(e.getErrorCode()).isEqualTo(ErrorCode.USER_NOT_FOUND);
         }
     }
-
     @Test
     @DisplayName("!!!예약_STORE_NOT_FOUND")
     void makeReservation_STORE_NOT_FOUND() {
@@ -122,7 +116,6 @@ class ReservationServiceTest {
         assertThat(find1.getPeople()).isEqualTo(saved.getPeople());
 
     }
-
     @Test
     @DisplayName("!!!예약 상세_예약이 존재하지 않음")
     void reservationDetail_RESERVATION_NOT_FOUND() {
@@ -145,7 +138,6 @@ class ReservationServiceTest {
             assertThat(e.getErrorCode()).isEqualTo(ErrorCode.RESERVATION_NOT_FOUND);
         }
     }
-
     @Test
     @DisplayName("!!!예약 상세_예약 접근 권한 없음")
     void reservationDetail_ACCESS_DENIED() {
@@ -170,7 +162,7 @@ class ReservationServiceTest {
     }
 
     @Test
-    @DisplayName("파트너_예약 내역 확인_정상")
+    @DisplayName("파트너 예약 내역 확인_정상")
     void listForPartner() {
         //given
         String partnerId = TEST_PARTNER_ID;
@@ -199,82 +191,8 @@ class ReservationServiceTest {
     }
 
     @Test
-    @DisplayName("예약 상태 변경_정상")
-    void changeReservationStatus() {
-        //given
-        MakeReservation.Request request = MakeReservation.Request.builder()
-                .userId(TEST_USER_ID)
-                .storeName(TEST_STORE_NAME)
-                .people(4)
-                .date(LocalDate.now())
-                .time(LocalTime.now())
-                .build();
-        ReservationDto reservationDto = reservationService.makeReservation(request);
-        Long id = reservationDto.getId();
-        String partnerId = reservationDto.getPartnerId();
-
-        //when
-        reservationService.changeReservationStatus(partnerId, id, ReservationStatus.CONFIRM);
-
-        ReservationDto find = reservationService.reservationDetail(id, partnerId);
-
-        //then
-        assertThat(find.getStatus()).isEqualTo(ReservationStatus.CONFIRM);
-
-    }
-
-    @Test
-    @DisplayName("!!!예약 상태 변경_예약 내역 없음")
-    void changeReservationStatus_RESERVATION_NOT_FOUND() {
-        //given
-        MakeReservation.Request request = MakeReservation.Request.builder()
-                .userId(TEST_USER_ID)
-                .storeName(TEST_STORE_NAME)
-                .people(4)
-                .date(LocalDate.now())
-                .time(LocalTime.now())
-                .build();
-        ReservationDto reservationDto = reservationService.makeReservation(request);
-        Long id = reservationDto.getId();
-        String partnerId = reservationDto.getPartnerId();
-
-        //when
-        //then
-        try{
-            reservationService.changeReservationStatus(partnerId, (long)Integer.MIN_VALUE, ReservationStatus.CONFIRM);
-        }catch(MyException e){
-            assertThat(e.getErrorCode()).isEqualTo(ErrorCode.RESERVATION_NOT_FOUND);
-        }
-    }
-
-    @Test
-    @DisplayName("!!!예약 상태 변경_파트너 아이디 불일치")
-    void changeReservationStatus_RESERVATION_UPDATE_AUTH_FAIL() {
-        //given
-        MakeReservation.Request request = MakeReservation.Request.builder()
-                .userId(TEST_USER_ID)
-                .storeName(TEST_STORE_NAME)
-                .people(4)
-                .date(LocalDate.now())
-                .time(LocalTime.now())
-                .build();
-        ReservationDto reservationDto = reservationService.makeReservation(request);
-        Long id = reservationDto.getId();
-        String partnerId = reservationDto.getPartnerId();
-
-        //when
-        //then
-        try{
-            reservationService.changeReservationStatus("asdfasdf", id, ReservationStatus.CONFIRM);
-        }catch(MyException e){
-            assertThat(e.getErrorCode()).isEqualTo(ErrorCode.RESERVATION_UPDATE_AUTH_FAIL);
-        }
-    }
-
-    @Test
-    @DisplayName("파트너 예약 상태 리스트_정상")
+    @DisplayName("파트너 예약 리스트 상태 별 검색_정상")
     void listForPartnerByStatus() {
-
         //given
         MakeReservation.Request request1 = MakeReservation.Request.builder()
                 .userId(TEST_USER_ID)
@@ -307,39 +225,177 @@ class ReservationServiceTest {
         reservationService.changeReservationStatus(TEST_PARTNER_ID, r2.getId(), ReservationStatus.T_E_S_T);
         reservationService.changeReservationStatus(TEST_PARTNER_ID, r3.getId(), ReservationStatus.T_E_S_T);
 
-        Page<ReservationDto> list = reservationService.listForPartnerByStatus(TEST_PARTNER_ID, 0, ReservationStatus.T_E_S_T);
+        Page<ReservationDto> list = reservationService.listForPartnerByStatus(TEST_PARTNER_ID, ReservationStatus.T_E_S_T, 0);
 
+        int cnt = 0;
         //then
         for (ReservationDto r : list) {
             assertThat(r.getStatus()).isEqualTo(ReservationStatus.T_E_S_T);
+            cnt++;
         }
+        assertThat(cnt).isEqualTo(2);
 
     }
 
     @Test
-    @DisplayName("!!!파트너 예약 상태 리스트_RESERVATION_IS_ZERO")
-    void listForPartnerByStatus_RESERVATION_IS_ZERO() {
-
+    @DisplayName("파트너 예약 날짜 별 검색_정상")
+    void listForPartnerByDate() {
         //given
         MakeReservation.Request request1 = MakeReservation.Request.builder()
+                .userId(TEST_USER_ID)
+                .storeName(TEST_STORE_NAME)
+                .people(4)
+                .date(LocalDate.of(9999,1,1))
+                .time(LocalTime.now())
+                .build();
+        reservationService.makeReservation(request1);
+
+        MakeReservation.Request request2 = MakeReservation.Request.builder()
+                .userId(TEST_USER_ID)
+                .storeName(TEST_STORE_NAME)
+                .people(4)
+                .date(LocalDate.of(9999,1,1))
+                .time(LocalTime.now())
+                .build();
+        reservationService.makeReservation(request2);
+
+        MakeReservation.Request request3 = MakeReservation.Request.builder()
+                .userId(TEST_USER_ID)
+                .storeName(TEST_STORE_NAME)
+                .people(4)
+                .date(LocalDate.of(9999,1,1))
+                .time(LocalTime.now())
+                .build();
+        reservationService.makeReservation(request3);
+
+        //when
+        Page<ReservationDto> list = reservationService.listForPartnerByDate(TEST_PARTNER_ID, LocalDate.of(9999,1,1), 0);
+
+        int cnt = 0;
+        //then
+        for (ReservationDto r : list) {
+            assertThat(r.getTime().getMonthValue()).isEqualTo(1);
+            assertThat(r.getTime().getDayOfMonth()).isEqualTo(1);
+            cnt++;
+        }
+        assertThat(cnt).isEqualTo(3);
+    }
+
+    @Test
+    void listForPartnerByStatusAndDate() {
+        //given
+        MakeReservation.Request request1 = MakeReservation.Request.builder()
+                .userId(TEST_USER_ID)
+                .storeName(TEST_STORE_NAME)
+                .people(4)
+                .date(LocalDate.of(9999,1,1))
+                .time(LocalTime.now())
+                .build();
+        ReservationDto r1 = reservationService.makeReservation(request1);
+
+        MakeReservation.Request request2 = MakeReservation.Request.builder()
+                .userId(TEST_USER_ID)
+                .storeName(TEST_STORE_NAME)
+                .people(4)
+                .date(LocalDate.of(9999,1,1))
+                .time(LocalTime.now())
+                .build();
+        ReservationDto r2 = reservationService.makeReservation(request2);
+
+        MakeReservation.Request request3 = MakeReservation.Request.builder()
+                .userId(TEST_USER_ID)
+                .storeName(TEST_STORE_NAME)
+                .people(4)
+                .date(LocalDate.of(9999,1,1))
+                .time(LocalTime.now())
+                .build();
+        ReservationDto r3 = reservationService.makeReservation(request3);
+
+        //when
+        reservationService.changeReservationStatus(TEST_PARTNER_ID, r2.getId(), ReservationStatus.T_E_S_T);
+        reservationService.changeReservationStatus(TEST_PARTNER_ID, r3.getId(), ReservationStatus.T_E_S_T);
+
+        Page<ReservationDto> list = reservationService.listForPartnerByStatusAndDate(TEST_PARTNER_ID, ReservationStatus.T_E_S_T, LocalDate.of(9999,1,1), 0);
+
+        int cnt = 0;
+        //then
+        for (ReservationDto r : list) {
+            assertThat(r.getTime().getMonthValue()).isEqualTo(1);
+            assertThat(r.getTime().getDayOfMonth()).isEqualTo(1);
+            cnt++;
+        }
+        assertThat(cnt).isEqualTo(2);
+    }
+
+    @Test
+    @DisplayName("예약 상태 변경_정상")
+    void changeReservationStatus() {
+        //given
+        MakeReservation.Request request = MakeReservation.Request.builder()
                 .userId(TEST_USER_ID)
                 .storeName(TEST_STORE_NAME)
                 .people(4)
                 .date(LocalDate.now())
                 .time(LocalTime.now())
                 .build();
-        ReservationDto r1 = reservationService.makeReservation(request1);
+        ReservationDto reservationDto = reservationService.makeReservation(request);
+        Long id = reservationDto.getId();
+        String partnerId = reservationDto.getPartnerId();
 
+        //when
+        reservationService.changeReservationStatus(partnerId, id, ReservationStatus.CONFIRM);
+
+        ReservationDto find = reservationService.reservationDetail(id, partnerId);
+
+        //then
+        assertThat(find.getStatus()).isEqualTo(ReservationStatus.CONFIRM);
+
+    }
+    @Test
+    @DisplayName("!!!예약 상태 변경_예약 내역 없음")
+    void changeReservationStatus_RESERVATION_NOT_FOUND() {
+        //given
+        MakeReservation.Request request = MakeReservation.Request.builder()
+                .userId(TEST_USER_ID)
+                .storeName(TEST_STORE_NAME)
+                .people(4)
+                .date(LocalDate.now())
+                .time(LocalTime.now())
+                .build();
+        ReservationDto reservationDto = reservationService.makeReservation(request);
+        Long id = reservationDto.getId();
+        String partnerId = reservationDto.getPartnerId();
 
         //when
         //then
         try{
-            reservationService.listForPartnerByStatus(TEST_PARTNER_ID, 0, ReservationStatus.T_E_S_T);
+            reservationService.changeReservationStatus(partnerId, (long)Integer.MIN_VALUE, ReservationStatus.CONFIRM);
         }catch(MyException e){
-            assertThat(e.getErrorCode()).isEqualTo(ErrorCode.RESERVATION_IS_ZERO);
+            assertThat(e.getErrorCode()).isEqualTo(ErrorCode.RESERVATION_NOT_FOUND);
         }
+    }
+    @Test
+    @DisplayName("!!!예약 상태 변경_파트너 아이디 불일치")
+    void changeReservationStatus_RESERVATION_UPDATE_AUTH_FAIL() {
+        //given
+        MakeReservation.Request request = MakeReservation.Request.builder()
+                .userId(TEST_USER_ID)
+                .storeName(TEST_STORE_NAME)
+                .people(4)
+                .date(LocalDate.now())
+                .time(LocalTime.now())
+                .build();
+        ReservationDto reservationDto = reservationService.makeReservation(request);
+        Long id = reservationDto.getId();
+        String partnerId = reservationDto.getPartnerId();
 
-
+        //when
+        //then
+        try{
+            reservationService.changeReservationStatus("asdfasdf", id, ReservationStatus.CONFIRM);
+        }catch(MyException e){
+            assertThat(e.getErrorCode()).isEqualTo(ErrorCode.RESERVATION_UPDATE_AUTH_FAIL);
+        }
     }
 
 
@@ -357,7 +413,6 @@ class ReservationServiceTest {
             assertThat(reservationDto.getUserId()).isEqualTo(userId);
         }
     }
-
     @Test
     @DisplayName("!!!유저-예약 내역 확인")
     void listForUser_RESERVATION_IS_ZERO() {
@@ -415,7 +470,6 @@ class ReservationServiceTest {
             assertThat(r.getStatus()).isEqualTo(ReservationStatus.T_E_S_T);
         }
     }
-
     @Test
     @DisplayName("!!!유저 예약 리스트(상태별)_검색 결과 없음")
     void listForUserByStatus_RESERVATION_IS_ZERO() {
@@ -460,7 +514,6 @@ class ReservationServiceTest {
         //then
         assertThat(TEST_USER_ID).isEqualTo(result.getUserId());
     }
-
     @Test
     @DisplayName("!!!매장 도착 확인_RESERVATION_NOT_FOUND")
     void arrivedCheck_RESERVATION_NOT_FOUND() {
@@ -485,7 +538,6 @@ class ReservationServiceTest {
             assertThat(e.getErrorCode()).isEqualTo(ErrorCode.RESERVATION_NOT_FOUND);
         }
     }
-
     @Test
     @DisplayName("!!!매장 도착 확인_전화번호 틀림")
     void arrivedCheck_RESERVATION_PHONE_NUMBER_INCORRECT() {
@@ -536,7 +588,6 @@ class ReservationServiceTest {
             assertThat(e.getErrorCode()).isEqualTo(ErrorCode.RESERVATION_STATUS_CHECK_ERROR);
         }
     }
-
     @Test
     @DisplayName("!!!매장 도착 확인_시간 문제")
     void arrivedCheck_RESERVATION_TIME_CHECK_ERROR() {
@@ -562,6 +613,4 @@ class ReservationServiceTest {
             assertThat(e.getErrorCode()).isEqualTo(ErrorCode.RESERVATION_TIME_CHECK_ERROR);
         }
     }
-
-
 }

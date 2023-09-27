@@ -8,9 +8,13 @@ import com.example.storereservation.domain.reservation.type.ReservationStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -18,32 +22,37 @@ import org.springframework.web.bind.annotation.*;
 public class ReservationPartnerController {
     private final ReservationService reservationService;
 
+
     /**
      * 파트너 - 예약 내역 모두 보기
+     * @param status 예약 진행 상태 ReservationStatus (required = false)
+     * @param date 예약 날짜 LocalDate (required = false)
+     * @param page 페이지 (default = 1)
+     * @param partner 로그인 된 파트너
      */
     @GetMapping("/partner/reservation/list")
-    public ResponseEntity<?> reservationListForPartner(@RequestParam(value = "p", defaultValue = "1") Integer page,
-                                                       @AuthenticationPrincipal PartnerEntity partner){
-        Page<ReservationDto> reservationList = reservationService.listForPartner(partner.getPartnerId(), page - 1);
-
-        return ResponseEntity.ok(reservationList);
-    }
-
-    /**
-     * 파트너 - 예약 내역 모두 보기 (status별)
-     * @param status 예약 진행 상태 ReservationStatus(enum)
-     * @param partner : 로그인된 파트너
-     *                TODO : 날짜 별 보기 추가하기
-     */
-    @GetMapping("/partner/reservation/list/{status}")
-    public ResponseEntity<?> reservationListForPartnerByStatus(@PathVariable String status,
+    public ResponseEntity<?> reservationListForPartner(@RequestParam(required = false) String status,
+                                                               @RequestParam(required = false)@DateTimeFormat(pattern = "yyyy-MM-dd")LocalDate date,
                                                                @RequestParam(value = "p", defaultValue = "1") Integer page,
                                                                @AuthenticationPrincipal PartnerEntity partner){
-        Page<ReservationDto> reservationList = reservationService.listForPartnerByStatus(
-                partner.getPartnerId(), page - 1, ReservationStatus.of(status));
+        Page<ReservationDto> reservationList;
+
+        if(status == null && date == null){
+            reservationList = reservationService.listForPartner(partner.getPartnerId(), page - 1);
+        }else if(status != null){
+            reservationList = reservationService.listForPartnerByStatus(
+                    partner.getPartnerId(), ReservationStatus.of(status), page - 1);
+        }else if(date != null){
+            reservationList = reservationService.listForPartnerByDate(
+                    partner.getPartnerId(), date, page - 1);
+        }else{
+            reservationList = reservationService.listForPartnerByStatusAndDate(
+                    partner.getPartnerId(), ReservationStatus.of(status), date, page - 1);
+        }
 
         return ResponseEntity.ok(reservationList);
     }
+
 
     /**
      * 파트너 - 예약 상태 변경
