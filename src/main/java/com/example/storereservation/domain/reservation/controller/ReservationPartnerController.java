@@ -33,6 +33,7 @@ public class ReservationPartnerController {
      * 파트너 - 예약 내역 모두 보기 (status별)
      * @param status 예약 진행 상태 ReservationStatus(enum)
      * @param partner : 로그인된 파트너
+     *                TODO : 날짜 별 보기 추가하기
      */
     @GetMapping("/partner/reservation/list/{status}")
     public ResponseEntity<?> reservationListForPartnerByStatus(@PathVariable String status,
