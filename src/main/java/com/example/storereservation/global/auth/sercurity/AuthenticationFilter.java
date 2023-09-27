@@ -35,7 +35,8 @@ public class AuthenticationFilter extends OncePerRequestFilter {
         if (StringUtils.hasText(token) && tokenProvider.validateToken(token)) {
             Authentication auth = tokenProvider.getAuthentication(token);
             SecurityContextHolder.getContext().setAuthentication(auth);
-            log.info("토큰 유효성 검증 성공");
+        }else{
+            log.info("토큰 유효성 검증 실패!!!!!");
         }
         filterChain.doFilter(request, response);
     }

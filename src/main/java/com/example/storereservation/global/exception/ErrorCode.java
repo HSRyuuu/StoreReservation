@@ -34,6 +34,10 @@ public enum ErrorCode {
     RESERVATION_STATUS_CODE_ILLEGAL_ARGUMENT(HttpStatus.BAD_REQUEST.value(), "해당 상태코드가 존재하지 않습니다." +
             " (REQUESTING, REFUSED, CONFIRM, ARRIVED, USE_COMPLETE, NO_SHOW)"),
     RESERVATION_UPDATE_AUTH_FAIL(HttpStatus.BAD_REQUEST.value(), "해당 파트너는 해당 예약에 대한 변경 권한이 없습니다."),
+    //예약 확인 status 문제 발생 시
+    RESERVATION_PHONE_NUMBER_INCORRECT(HttpStatus.BAD_REQUEST.value(), "전화번호 정보가 일치하지 않습니다. 전화번호 뒷 4자리를 다시 입력해주세요."),
+    RESERVATION_STATUS_CHECK_ERROR(HttpStatus.BAD_REQUEST.value(), "예약 상태 코드에 문제가 있습니다. 가게에 문의하세요."),
+    RESERVATION_TIME_CHECK_ERROR(HttpStatus.BAD_REQUEST.value(), "예약 시간에 문제가 있습니다. 가게에 문의하세요."),
 
     //Security
     TOKEN_TIME_OUT(HttpStatus.CONFLICT.value(), "토큰이 만료되었습니다."),

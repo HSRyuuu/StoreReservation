@@ -2,6 +2,8 @@ package com.example.storereservation.domain.reservation.controller;
 
 import com.example.storereservation.domain.reservation.dto.MakeReservation;
 import com.example.storereservation.domain.reservation.dto.ReservationDto;
+import com.example.storereservation.domain.reservation.dto.UserArrivedComplete;
+import com.example.storereservation.domain.reservation.dto.UserArrivedInput;
 import com.example.storereservation.domain.reservation.service.ReservationService;
 import com.example.storereservation.domain.reservation.type.ReservationStatus;
 import com.example.storereservation.domain.user.persist.UserEntity;
@@ -61,6 +63,19 @@ public class ReservationUserController {
 
         return ResponseEntity.ok(reservationList);
     }
+
+    /**
+     * 도착 확인
+     * @param input (reservationId, phoneNumberLast4)
+     */
+    @PostMapping("/reservation/arrived")
+    public ResponseEntity<?> arrivedHandling(@RequestBody UserArrivedInput input){
+        ReservationDto reservationDto = reservationService.arrivedCheck(input.getReservationId(), input.getPhoneNumberLast4());
+
+        return ResponseEntity.ok(new UserArrivedComplete(reservationDto));
+    }
+
+
 
 }
 

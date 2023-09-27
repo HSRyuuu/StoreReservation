@@ -437,4 +437,131 @@ class ReservationServiceTest {
             assertThat(e.getErrorCode()).isEqualTo(ErrorCode.RESERVATION_IS_ZERO);
         }
     }
+
+    @Test
+    @DisplayName("매장 도착 확인_정상")
+    void arrivedCheck() {
+        MakeReservation.Request request = MakeReservation.Request.builder()
+                .userId(TEST_USER_ID)
+                .storeName(TEST_STORE_NAME)
+                .people(4)
+                .date(LocalDate.now().plusDays(1))
+                .time(LocalTime.now())
+                .build();
+        ReservationDto r = reservationService.makeReservation(request);
+        reservationService.changeReservationStatus(TEST_PARTNER_ID, r.getId(), ReservationStatus.CONFIRM);
+        //given
+        Long reservationId = r.getId();
+        String phoneNumberLast4 = r.getPhone().substring(7);
+
+        //when
+        ReservationDto result = reservationService.arrivedCheck(reservationId, phoneNumberLast4);
+
+        //then
+        assertThat(TEST_USER_ID).isEqualTo(result.getUserId());
+    }
+
+    @Test
+    @DisplayName("!!!매장 도착 확인_RESERVATION_NOT_FOUND")
+    void arrivedCheck_RESERVATION_NOT_FOUND() {
+        MakeReservation.Request request = MakeReservation.Request.builder()
+                .userId(TEST_USER_ID)
+                .storeName(TEST_STORE_NAME)
+                .people(4)
+                .date(LocalDate.now().plusDays(1))
+                .time(LocalTime.now())
+                .build();
+        ReservationDto r = reservationService.makeReservation(request);
+        reservationService.changeReservationStatus(TEST_PARTNER_ID, r.getId(), ReservationStatus.CONFIRM);
+        //given
+        Long reservationId = -123L;
+        String phoneNumberLast4 = r.getPhone().substring(7);
+
+        //when
+        //then
+        try {
+            reservationService.arrivedCheck(reservationId, phoneNumberLast4);
+        }catch (MyException e){
+            assertThat(e.getErrorCode()).isEqualTo(ErrorCode.RESERVATION_NOT_FOUND);
+        }
+    }
+
+    @Test
+    @DisplayName("!!!매장 도착 확인_전화번호 틀림")
+    void arrivedCheck_RESERVATION_PHONE_NUMBER_INCORRECT() {
+        MakeReservation.Request request = MakeReservation.Request.builder()
+                .userId(TEST_USER_ID)
+                .storeName(TEST_STORE_NAME)
+                .people(4)
+                .date(LocalDate.now().plusDays(1))
+                .time(LocalTime.now())
+                .build();
+        ReservationDto r = reservationService.makeReservation(request);
+        reservationService.changeReservationStatus(TEST_PARTNER_ID, r.getId(), ReservationStatus.CONFIRM);
+        //given
+        Long reservationId = r.getId();
+        String phoneNumberLast4 = "wrong";
+
+        //when
+        //then
+        try {
+            reservationService.arrivedCheck(reservationId, phoneNumberLast4);
+        }catch (MyException e){
+            assertThat(e.getErrorCode()).isEqualTo(ErrorCode.RESERVATION_PHONE_NUMBER_INCORRECT);
+        }
+    }
+    @Test
+    @DisplayName("!!!매장 도착 확인_예약 상태 != CONFIRM")
+    void arrivedCheck_RESERVATION_STATUS_CHECK_ERROR() {
+        MakeReservation.Request request = MakeReservation.Request.builder()
+                .userId(TEST_USER_ID)
+                .storeName(TEST_STORE_NAME)
+                .people(4)
+                .date(LocalDate.now().plusDays(1))
+                .time(LocalTime.now())
+                .build();
+        ReservationDto r = reservationService.makeReservation(request);
+        //Status 변경 하지 않음.
+        //reservationService.changeReservationStatus(TEST_PARTNER_ID, r.getId(), ReservationStatus.CONFIRM);
+
+        //given
+        Long reservationId = r.getId();
+        String phoneNumberLast4 = r.getPhone().substring(7);
+
+        //when
+        //then
+        try {
+            reservationService.arrivedCheck(reservationId, phoneNumberLast4);
+        }catch (MyException e){
+            assertThat(e.getErrorCode()).isEqualTo(ErrorCode.RESERVATION_STATUS_CHECK_ERROR);
+        }
+    }
+
+    @Test
+    @DisplayName("!!!매장 도착 확인_시간 문제")
+    void arrivedCheck_RESERVATION_TIME_CHECK_ERROR() {
+        MakeReservation.Request request = MakeReservation.Request.builder()
+                .userId(TEST_USER_ID)
+                .storeName(TEST_STORE_NAME)
+                .people(4)
+                .date(LocalDate.now())
+                .time(LocalTime.now())
+                .build();
+        ReservationDto r = reservationService.makeReservation(request);
+        reservationService.changeReservationStatus(TEST_PARTNER_ID, r.getId(), ReservationStatus.CONFIRM);
+
+        //given
+        Long reservationId = r.getId();
+        String phoneNumberLast4 = r.getPhone().substring(7);
+
+        //when
+        //then
+        try {
+            reservationService.arrivedCheck(reservationId, phoneNumberLast4);
+        }catch (MyException e){
+            assertThat(e.getErrorCode()).isEqualTo(ErrorCode.RESERVATION_TIME_CHECK_ERROR);
+        }
+    }
+
+
 }

@@ -111,12 +111,12 @@ public class ReservationService {
 
     /**
      * 파트너 - 예약 상태 변경
-     * @param id
+     * @param reservationId
      * @param status
      * @param partnerId
      */
-    public void changeReservationStatus(String partnerId, Long id, ReservationStatus status){
-        ReservationEntity reservation = reservationRepository.findById(id)
+    public void changeReservationStatus(String partnerId, Long reservationId, ReservationStatus status){
+        ReservationEntity reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(() -> new MyException(ErrorCode.RESERVATION_NOT_FOUND));
 
         if(!reservation.getPartnerId().equals(partnerId)){
@@ -151,7 +151,7 @@ public class ReservationService {
      */
     public Page<ReservationDto> listForUser(String userId, Integer page){
         Page<ReservationEntity> reservations =
-                reservationRepository.findByUserIdOrderByTime(
+                reservationRepository.findByUserIdOrderByTimeDesc(
                         userId,
                         PageRequest.of(page, PageConst.RESERVATION_LIST_PAGE_SIZE)
                 );
@@ -181,6 +181,37 @@ public class ReservationService {
         return reservations.map(reservation -> ReservationDto.fromEntity(reservation));
     }
 
+    /**
+     * 도착 확인
+     * @param reservationId
+     * @return boolean result
+     */
+    public ReservationDto arrivedCheck(Long reservationId, String inputPhoneNumberLast4){
+        ReservationEntity reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new MyException(ErrorCode.RESERVATION_NOT_FOUND));
+        validate(reservation, inputPhoneNumberLast4);
+        reservation.setStatus(ReservationStatus.ARRIVED);
+        reservationRepository.save(reservation);
+        return ReservationDto.fromEntity(reservation);
+    }
 
+    /**
+     * 도착 확인 validation
+     * 1. 전화번호 뒷 4자리 확인
+     * 2. 예약 상태가 CONFIRM인지 확인
+     * 3. 예약 상태에 맞게 왔는지 확인
+     */
+    private void validate(ReservationEntity reservation, String inputPhoneNumberLast4){
+        String rightPhoneNumberLast4 = reservation.getPhone().substring(7);
+
+        if(!rightPhoneNumberLast4.equals(inputPhoneNumberLast4)){
+            throw new MyException(ErrorCode.RESERVATION_PHONE_NUMBER_INCORRECT);
+        }else if(!reservation.getStatus().equals(ReservationStatus.CONFIRM)){
+            throw new MyException(ErrorCode.RESERVATION_STATUS_CHECK_ERROR);
+        }else if(LocalDateTime.now().isAfter(reservation.getTime().minusMinutes(10L))){
+            throw new MyException(ErrorCode.RESERVATION_TIME_CHECK_ERROR);
+            //(현재시간) > (예약 시간 - 10분) => 10분 전에 도착하지 못함.
+        }
+    }
 
 }
