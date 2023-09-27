@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.*;
 public class PartnerController {
 
     private final PartnerService partnerService;
-    private final ReservationService reservationService;
 
 
     /**
@@ -55,41 +54,5 @@ public class PartnerController {
         return ResponseEntity.ok(EditStore.Response.fromDto(storeDto));
     }
 
-    /**
-     * 예약 내역 모두 보기
-     */
-    @GetMapping("/partner/reservation/list")
-    public ResponseEntity<?> reservationListForPartner(@RequestParam(value = "p", defaultValue = "1") Integer page,
-                                                       @AuthenticationPrincipal PartnerEntity partner){
-        Page<ReservationDto> reservationList = reservationService.listForPartner(partner.getPartnerId(), page - 1);
-
-        return ResponseEntity.ok(reservationList);
-    }
-
-    /**
-     * 상태 = status 인 예약 내역 모두 보기
-     * @param status
-     * @param page
-     * @param partner
-     * @return
-     */
-    @GetMapping("/partner/reservation/list/{status}")
-    public ResponseEntity<?> reservationListForPartnerByStatus(@PathVariable String status,
-                                                                       @RequestParam(value = "p", defaultValue = "1") Integer page,
-                                                                       @AuthenticationPrincipal PartnerEntity partner){
-        Page<ReservationDto> reservationList = reservationService.listForPartnerByStatus(
-                partner.getPartnerId(), page - 1, ReservationStatus.of(status));
-
-        return ResponseEntity.ok(reservationList);
-    }
-
-    @PutMapping("/partner/reservation/{reservationId}")
-    public ResponseEntity<?> changeReservationStatus(@PathVariable("reservationId") Long id,
-                                                     @RequestBody ChangeReservationInput input,
-                                                     @AuthenticationPrincipal PartnerEntity partner){
-        reservationService.changeReservationStatus(partner.getPartnerId(), id, ReservationStatus.of(input.getStatus()));
-
-        return ResponseEntity.ok(reservationService.reservationDetail(id, partner.getPartnerId()));
-    }
 
 }

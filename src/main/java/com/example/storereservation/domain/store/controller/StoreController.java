@@ -20,7 +20,8 @@ public class StoreController {
     /**
      * 매장 검색
      * @param page : 페이지
-     * @param input : storeName, sortType
+     * @param input : storeName, sortType( ALL, ALPHABET, RATING, RATING_COUNT, DISTANCE)
+     *              TODO : 거리순(Distance)
      */
     @GetMapping("/store/list")
     public ResponseEntity<?> storeList(@RequestParam(value = "p", defaultValue = "1") Integer page,

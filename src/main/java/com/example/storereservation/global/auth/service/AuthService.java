@@ -22,6 +22,9 @@ public class AuthService implements UserDetailsService {
     private final UserRepository userRepository;
     private final PartnerRepository partnerRepository;
 
+    /**
+     * User auth
+     */
     public UserEntity authenticateUser(LoginInput input) {
         UserEntity user = userRepository.findByUserId(input.getUsername())
                 .orElseThrow(() -> new MyException(ErrorCode.USER_NOT_FOUND));
@@ -31,6 +34,9 @@ public class AuthService implements UserDetailsService {
         return user;
     }
 
+    /**
+     * Partner auth
+     */
     public PartnerEntity authenticatePartner(LoginInput input) {
         PartnerEntity partner = partnerRepository.findByPartnerId(input.getUsername())
                 .orElseThrow(() -> new MyException(ErrorCode.PARTNER_NOT_FOUND));

@@ -57,7 +57,7 @@ class ReservationServiceTest {
     }
 
     @Test
-    @DisplayName("예약_USER_NOT_FOUND")
+    @DisplayName("!!!예약_USER_NOT_FOUND")
     void makeReservation_USER_NOT_FOUND() {
         //given
         MakeReservation.Request request = MakeReservation.Request.builder()
@@ -76,7 +76,7 @@ class ReservationServiceTest {
     }
 
     @Test
-    @DisplayName("예약_STORE_NOT_FOUND")
+    @DisplayName("!!!예약_STORE_NOT_FOUND")
     void makeReservation_STORE_NOT_FOUND() {
         //given
         MakeReservation.Request request = MakeReservation.Request.builder()
@@ -170,7 +170,7 @@ class ReservationServiceTest {
     }
 
     @Test
-    @DisplayName("파트너_예약 내역 확인")
+    @DisplayName("파트너_예약 내역 확인_정상")
     void listForPartner() {
         //given
         String partnerId = TEST_PARTNER_ID;
@@ -272,7 +272,7 @@ class ReservationServiceTest {
     }
 
     @Test
-    @DisplayName("예약 상태 리스트_정상")
+    @DisplayName("파트너 예약 상태 리스트_정상")
     void listForPartnerByStatus() {
 
         //given
@@ -317,7 +317,7 @@ class ReservationServiceTest {
     }
 
     @Test
-    @DisplayName("!!!예약 상태 리스트_RESERVATION_IS_ZERO")
+    @DisplayName("!!!파트너 예약 상태 리스트_RESERVATION_IS_ZERO")
     void listForPartnerByStatus_RESERVATION_IS_ZERO() {
 
         //given
@@ -343,4 +343,98 @@ class ReservationServiceTest {
     }
 
 
+    @Test
+    @DisplayName("유저-예약 내역 확인")
+    void listForUser() {
+        //given
+        String userId = TEST_USER_ID;
+        Integer page = 0; // 컨트롤러에서 -1 해줘서 service에서는 0부터 시작
+        //when
+        Page<ReservationDto> list = reservationService.listForUser(userId, page);
+
+        //then
+        for (ReservationDto reservationDto : list) {
+            assertThat(reservationDto.getUserId()).isEqualTo(userId);
+        }
+    }
+
+    @Test
+    @DisplayName("!!!유저-예약 내역 확인")
+    void listForUser_RESERVATION_IS_ZERO() {
+        //given
+        String userId = "asdfasdf";
+        Integer page = 0; // 컨트롤러에서 -1 해줘서 service에서는 0부터 시작
+        //when
+        //then
+        try{
+            reservationService.listForUser(userId, page);
+        }catch(MyException e){
+            assertThat(e.getErrorCode()).isEqualTo(ErrorCode.RESERVATION_IS_ZERO);
+        }
+    }
+
+    @Test
+    @DisplayName("유저 예약 리스트(상태 별)_정상")
+    void listForUserByStatus() {
+        //given
+        MakeReservation.Request request1 = MakeReservation.Request.builder()
+                .userId(TEST_USER_ID)
+                .storeName(TEST_STORE_NAME)
+                .people(4)
+                .date(LocalDate.now())
+                .time(LocalTime.now())
+                .build();
+        ReservationDto r1 = reservationService.makeReservation(request1);
+
+        MakeReservation.Request request2 = MakeReservation.Request.builder()
+                .userId(TEST_USER_ID)
+                .storeName(TEST_STORE_NAME)
+                .people(4)
+                .date(LocalDate.now())
+                .time(LocalTime.now())
+                .build();
+        ReservationDto r2 = reservationService.makeReservation(request2);
+
+        MakeReservation.Request request3 = MakeReservation.Request.builder()
+                .userId(TEST_USER_ID)
+                .storeName(TEST_STORE_NAME)
+                .people(4)
+                .date(LocalDate.now())
+                .time(LocalTime.now())
+                .build();
+        ReservationDto r3 = reservationService.makeReservation(request3);
+
+        //when
+
+        reservationService.changeReservationStatus(TEST_PARTNER_ID, r3.getId(), ReservationStatus.T_E_S_T);
+
+        Page<ReservationDto> list = reservationService.listForUserByStatus(TEST_PARTNER_ID, 0, ReservationStatus.T_E_S_T);
+
+        //then
+        for (ReservationDto r : list) {
+            assertThat(r.getStatus()).isEqualTo(ReservationStatus.T_E_S_T);
+        }
+    }
+
+    @Test
+    @DisplayName("!!!유저 예약 리스트(상태별)_검색 결과 없음")
+    void listForUserByStatus_RESERVATION_IS_ZERO() {
+        //given
+        MakeReservation.Request request1 = MakeReservation.Request.builder()
+                .userId(TEST_USER_ID)
+                .storeName(TEST_STORE_NAME)
+                .people(4)
+                .date(LocalDate.now())
+                .time(LocalTime.now())
+                .build();
+        ReservationDto r = reservationService.makeReservation(request1);
+
+        //when
+        //then
+        try{
+            reservationService.listForUserByStatus(TEST_USER_ID, 0, ReservationStatus.T_E_S_T);
+        }catch(MyException e){
+            assertThat(e.getErrorCode()).isEqualTo(ErrorCode.RESERVATION_IS_ZERO);
+        }
+    }
 }

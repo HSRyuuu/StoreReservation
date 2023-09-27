@@ -29,7 +29,7 @@ public class ReservationService {
     private final StoreRepository storeRepository;
 
     /**
-     * 매장 예약
+     * 유저 - 매장 예약
      * @param request : userId, storeName, people(인원 수)
      * @return
      */
@@ -63,7 +63,7 @@ public class ReservationService {
     }
 
     /**
-     * 예약 상세 정보
+     * 유저/파트너 - 예약 상세 정보
      */
     public ReservationDto reservationDetail(Long id, String username){
         ReservationEntity reservation = reservationRepository.findById(id)
@@ -91,11 +91,10 @@ public class ReservationService {
     }
 
     /**
-     * partner ID로 예약 내역 확인
+     * 파트너 - partner ID로 예약 내역 확인
      * @param partnerId
      * @param page
      * sort : 시간 빠른 순
-     * @return
      */
     public Page<ReservationDto> listForPartner(String partnerId, Integer page){
         Page<ReservationEntity> reservations =
@@ -111,7 +110,7 @@ public class ReservationService {
     }
 
     /**
-     * 예약 상태 변경 - 파트너
+     * 파트너 - 예약 상태 변경
      * @param id
      * @param status
      * @param partnerId
@@ -128,17 +127,50 @@ public class ReservationService {
     }
 
     /**
-     * partner ID와 ReservationStatus로 내역 확인
-     * @param partnerId
-     * @param page
+     * 파트너 - partner ID와 ReservationStatus로 내역 확인
      * sort : 시간 빠른 순
-     * @return
      */
     public Page<ReservationDto> listForPartnerByStatus(String partnerId, Integer page, ReservationStatus status){
 
         Page<ReservationEntity> reservations =
                 reservationRepository.findByPartnerIdAndStatusOrderByTime(
                         partnerId,
+                        status,
+                        PageRequest.of(page, PageConst.RESERVATION_LIST_PAGE_SIZE)
+                );
+
+        if(reservations.getSize() == 0){
+            throw new MyException(ErrorCode.RESERVATION_IS_ZERO);
+        }
+        return reservations.map(reservation -> ReservationDto.fromEntity(reservation));
+    }
+
+    /**
+     * 유저 - user ID로 예약 내역 확인
+     * sort : 시간 빠른 순
+     */
+    public Page<ReservationDto> listForUser(String userId, Integer page){
+        Page<ReservationEntity> reservations =
+                reservationRepository.findByUserIdOrderByTime(
+                        userId,
+                        PageRequest.of(page, PageConst.RESERVATION_LIST_PAGE_SIZE)
+                );
+
+        if(reservations.getSize() == 0){
+            throw new MyException(ErrorCode.RESERVATION_IS_ZERO);
+        }
+        return reservations.map(reservation -> ReservationDto.fromEntity(reservation));
+    }
+
+    /**
+     * 유저 - userId와 ReservationStatus로 내역 확인
+     * sort : 시간 빠른 순
+     */
+    public Page<ReservationDto> listForUserByStatus(String userId, Integer page, ReservationStatus status){
+
+        Page<ReservationEntity> reservations =
+                reservationRepository.findByUserIdAndStatusOrderByTime(
+                        userId,
                         status,
                         PageRequest.of(page, PageConst.RESERVATION_LIST_PAGE_SIZE)
                 );

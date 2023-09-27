@@ -10,7 +10,8 @@ import java.util.List;
 
 @Repository
 public interface ReservationRepository extends JpaRepository<ReservationEntity, Long> {
-    List<ReservationEntity> findByUserIdOrderByTime(String userId);
+    Page<ReservationEntity> findByUserIdOrderByTime(String userId, Pageable pageable);
+    Page<ReservationEntity> findByUserIdAndStatusOrderByTime(String userId, ReservationStatus status, Pageable pageable);
     Page<ReservationEntity> findByPartnerIdOrderByTime(String partnerId, Pageable pageable);
     Page<ReservationEntity> findByPartnerIdAndStatusOrderByTime(String partnerId, ReservationStatus status, Pageable pageable);
 }
