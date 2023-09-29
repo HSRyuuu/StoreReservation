@@ -186,6 +186,7 @@ public class ReservationService {
             throw new MyException(ErrorCode.RESERVATION_UPDATE_AUTH_FAIL);
         }
         reservation.setStatus(status);
+        reservation.setStatusUpdatedAt(LocalDateTime.now());
         reservationRepository.save(reservation);
     }
 
@@ -237,6 +238,7 @@ public class ReservationService {
                 .orElseThrow(() -> new MyException(ErrorCode.RESERVATION_NOT_FOUND));
         validate(reservation, inputPhoneNumberLast4);
         reservation.setStatus(ReservationStatus.ARRIVED);
+        reservation.setStatusUpdatedAt(LocalDateTime.now());
         reservationRepository.save(reservation);
         return ReservationDto.fromEntity(reservation);
     }

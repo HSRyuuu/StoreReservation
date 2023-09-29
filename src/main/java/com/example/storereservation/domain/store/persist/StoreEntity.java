@@ -10,7 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.time.LocalDateTime;
 
-@Getter
+@Getter@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -24,6 +24,7 @@ public class StoreEntity {
     private String storeName;
     private String storeAddr;
     private String text;
+
 
     private double rating;
     private Long ratingCount;

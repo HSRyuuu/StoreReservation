@@ -1,5 +1,6 @@
 package com.example.storereservation.domain.store.service;
 
+import com.example.storereservation.domain.review.dto.ReviewDto;
 import com.example.storereservation.global.exception.ErrorCode;
 import com.example.storereservation.global.exception.MyException;
 import com.example.storereservation.global.type.PageConst;
@@ -59,5 +60,26 @@ public class StoreService {
             //TODO 거리 ???
         }
         return pageRequest;
+    }
+
+    /**
+     * 리뷰 추가됬을 때, 매장의 리뷰 업데이트
+     * @param review
+     */
+    public void updateRating(ReviewDto review){
+        StoreEntity store = storeRepository.findByStoreName(review.getStoreName())
+                .orElseThrow(() -> new MyException(ErrorCode.STORE_NOT_FOUND));
+        Long ratingCount = store.getRatingCount();
+        double rating = getNewRating(store.getRating(), ratingCount, review.getRating());
+
+        store.setRating(rating);
+        store.setRatingCount(ratingCount + 1);
+
+        storeRepository.save(store);
+    }
+    private double getNewRating(double rating, Long ratingCount, double newRating){
+        double total = rating * ratingCount;
+        return (total + newRating) / (ratingCount + 1);
+
     }
 }

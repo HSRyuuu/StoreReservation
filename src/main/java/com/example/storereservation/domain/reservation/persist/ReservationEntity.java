@@ -7,7 +7,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Getter
+@Getter@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -25,7 +25,6 @@ public class ReservationEntity {
 
     private Integer people;
 
-    @Setter
     @Enumerated(EnumType.STRING)
     private ReservationStatus status;
     private LocalDateTime statusUpdatedAt;
