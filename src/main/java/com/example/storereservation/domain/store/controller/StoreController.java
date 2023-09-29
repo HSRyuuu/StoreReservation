@@ -46,5 +46,13 @@ public class StoreController {
         return ResponseEntity.ok(findStore);
     }
 
+    /**
+     * TODO 매장 별 리뷰 목록 확인
+     */
+    @GetMapping("/store/review/{storeId}")
+    public ResponseEntity<?> reviewListByStoreId(@PathVariable Long storeId){
+
+        return ResponseEntity.ok(null);
+    }
 
 }
