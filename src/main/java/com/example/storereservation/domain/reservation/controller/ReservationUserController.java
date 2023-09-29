@@ -40,6 +40,7 @@ public class ReservationUserController {
 
     /**
      * 유저 - 예약 내역 모두 보기
+     * 정렬 : 최신 순
      * @param user : 로그인 된 유저
      */
     @GetMapping("/reservation/list")

@@ -282,6 +282,7 @@ class ReservationServiceTest {
     }
 
     @Test
+    @DisplayName("파트너 예약 검색 상태 + 날짜 _정상")
     void listForPartnerByStatusAndDate() {
         //given
         MakeReservation.Request request1 = MakeReservation.Request.builder()
