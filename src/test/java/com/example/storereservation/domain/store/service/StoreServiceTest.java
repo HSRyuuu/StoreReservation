@@ -75,8 +75,5 @@ class StoreServiceTest {
             assertThat(e.getErrorCode()).isEqualTo(ErrorCode.STORE_NOT_FOUND);
         }
 
-
-
-
     }
 }

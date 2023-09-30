@@ -1,6 +1,7 @@
 package com.example.storereservation.domain.review.controller;
 
 import com.example.storereservation.domain.review.dto.AddReview;
+import com.example.storereservation.domain.review.dto.EditReview;
 import com.example.storereservation.domain.review.dto.ReviewDto;
 import com.example.storereservation.domain.review.service.ReviewService;
 import com.example.storereservation.domain.store.service.StoreService;
@@ -28,13 +29,11 @@ public class ReviewController {
     public ResponseEntity<?> addReview(@PathVariable Long reservationId,
                                        @RequestBody AddReview.Request request,
                                        @AuthenticationPrincipal UserDetails user){
-
         ReviewDto reviewDto = reviewService.addReview(reservationId, user.getUsername(), request);
-
-        storeService.updateRating(reviewDto);//매장 리뷰 업데이트
 
         return ResponseEntity.ok(AddReview.Response.fromDto(reviewDto));
     }
+
     /**
      * 내가 쓴 리뷰 리스트 확인
      */
@@ -51,12 +50,15 @@ public class ReviewController {
     }
 
     /**
-     * TODO 리뷰 수정
+     * 리뷰 수정
      */
     @PutMapping("/review/edit/{reviewId}")
-    public ResponseEntity<?> editReview(@PathVariable Long reviewId){
+    public ResponseEntity<?> editReview(@PathVariable Long reviewId,
+                                        @RequestBody EditReview.Request request,
+                                        @AuthenticationPrincipal UserEntity user){
+        ReviewDto editedReview = reviewService.editReview(reviewId, user.getUserId(), request);
 
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok(EditReview.Response.fromDto(editedReview));
     }
 
 }

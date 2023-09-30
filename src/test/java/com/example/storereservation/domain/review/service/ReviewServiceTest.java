@@ -7,7 +7,10 @@ import com.example.storereservation.domain.reservation.persist.ReservationReposi
 import com.example.storereservation.domain.reservation.service.ReservationService;
 import com.example.storereservation.domain.reservation.type.ReservationStatus;
 import com.example.storereservation.domain.review.dto.AddReview;
+import com.example.storereservation.domain.review.dto.EditReview;
 import com.example.storereservation.domain.review.dto.ReviewDto;
+import com.example.storereservation.domain.review.persist.ReviewEntity;
+import com.example.storereservation.domain.review.persist.ReviewRepository;
 import com.example.storereservation.domain.store.persist.StoreEntity;
 import com.example.storereservation.domain.store.persist.StoreRepository;
 import com.example.storereservation.global.exception.ErrorCode;
@@ -40,6 +43,8 @@ class ReviewServiceTest {
     ReservationService reservationService;
     @Autowired
     StoreRepository storeRepository;
+    @Autowired
+    ReviewRepository reviewRepository;
 
     @Test
     @DisplayName("리뷰 쓰기_정상")
@@ -240,6 +245,45 @@ class ReviewServiceTest {
         for (ReviewDto reviewDto : list) {
             assertThat(reviewDto.getUserId()).isEqualTo(userId);
         }
+    }
 
+    @Test
+    @DisplayName("리뷰 수정_정상")
+    void editReview() {
+        //예약
+        MakeReservation.Request reservationReq = MakeReservation.Request.builder()
+                .userId(TEST_USER_ID)
+                .storeName(TEST_STORE_NAME)
+                .people(4)
+                .date(LocalDate.now())
+                .time(LocalTime.now())
+                .build();
+        ReservationDto reservation = reservationService.makeReservation(reservationReq);
+        reservationService.changeReservationStatus(TEST_PARTNER_ID, reservation.getId(), ReservationStatus.USE_COMPLETE);
+        //리뷰
+        AddReview.Request reviewReq = AddReview.Request.builder()
+                .rating(4)
+                .text("hello")
+                .build();
+
+        Long reservationId = reservation.getId();
+        String userId = reservation.getUserId();
+
+        ReviewDto addedReview = reviewService.addReview(reservationId, userId, reviewReq);
+
+        Long reviewId = addedReview.getId();
+
+        //given
+        EditReview.Request editReviewReq = EditReview.Request.builder()
+                .rating(0)
+                .text("edit").build();
+
+        //when
+        reviewService.editReview(addedReview.getId(), userId, editReviewReq);
+        ReviewEntity editedReview = reviewRepository.findById(reviewId).get();
+
+        //then
+        assertThat(editedReview.getText()).isEqualTo("edit");
+        assertThat(editedReview.getRating()).isEqualTo(0);
     }
 }
