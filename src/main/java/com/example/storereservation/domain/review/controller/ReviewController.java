@@ -4,7 +4,11 @@ import com.example.storereservation.domain.review.dto.AddReview;
 import com.example.storereservation.domain.review.dto.ReviewDto;
 import com.example.storereservation.domain.review.service.ReviewService;
 import com.example.storereservation.domain.store.service.StoreService;
+import com.example.storereservation.domain.user.persist.UserEntity;
+import com.example.storereservation.global.exception.ErrorCode;
+import com.example.storereservation.global.exception.MyException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -32,13 +36,18 @@ public class ReviewController {
         return ResponseEntity.ok(AddReview.Response.fromDto(reviewDto));
     }
     /**
-     * TODO 내가 쓴 리뷰 리스트 확인
-     *
+     * 내가 쓴 리뷰 리스트 확인
      */
     @GetMapping("/review/list/{userId}")
-    public ResponseEntity<?> reviewList(@PathVariable String userId){
+    public ResponseEntity<?> reviewList(@PathVariable String userId,
+                                        @RequestParam(value = "p", defaultValue = "1") Integer page,
+                                        @AuthenticationPrincipal UserEntity user){
+        if(!user.getUserId().equals(userId)){
+            throw new MyException(ErrorCode.NO_AUTHORITY_ERROR);
+        }
+        Page<ReviewDto> list = reviewService.reviewList(userId, page - 1);
 
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok(list);
     }
 
     /**

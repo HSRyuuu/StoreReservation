@@ -18,6 +18,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 
 import javax.transaction.Transactional;
 
@@ -226,4 +227,19 @@ class ReviewServiceTest {
         }
     }
 
+    @Test
+    @DisplayName("리뷰 리스트 조회 by userId")
+    void reviewList() {
+        //given
+        String userId = TEST_USER_ID;
+
+        //when
+        Page<ReviewDto> list = reviewService.reviewList(userId, 0);
+
+        //then
+        for (ReviewDto reviewDto : list) {
+            assertThat(reviewDto.getUserId()).isEqualTo(userId);
+        }
+
+    }
 }

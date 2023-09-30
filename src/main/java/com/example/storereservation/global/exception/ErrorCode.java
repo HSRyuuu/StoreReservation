@@ -43,7 +43,8 @@ public enum ErrorCode {
     REVIEW_NOT_AVAILABLE(HttpStatus.CONFLICT.value(), "해당 예약은 리뷰를 쓸 수 있는 상태가 아닙니다."),
     REVIEW_ALREADY_EXIST(HttpStatus.CONFLICT.value(), "해당 예약에 대한 리뷰가 이미 존재합니다."),
     REVIEW_RATING_RANGE_ERROR(HttpStatus.BAD_REQUEST.value(), "리뷰 숫자 범위에 문제가 있습니다.(Required : 0 ~ 5)"),
-    REVIEW_TEXT_TOO_LONG(HttpStatus.BAD_REQUEST.value(), "텍스트 길이가 너무 깁니다.(200자 이내"),
+    REVIEW_TEXT_TOO_LONG(HttpStatus.BAD_REQUEST.value(), "텍스트 길이가 너무 깁니다.(200자 이내)"),
+    REVIEW_NOT_FOUND(HttpStatus.BAD_REQUEST.value(), "리뷰 내역이 존재하지 않습니다."),
 
 
     //Security

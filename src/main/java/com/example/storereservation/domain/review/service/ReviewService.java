@@ -10,7 +10,10 @@ import com.example.storereservation.domain.review.persist.ReviewRepository;
 import com.example.storereservation.domain.user.persist.UserRepository;
 import com.example.storereservation.global.exception.ErrorCode;
 import com.example.storereservation.global.exception.MyException;
+import com.example.storereservation.global.type.PageConst;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Service
@@ -65,6 +68,20 @@ public class ReviewService {
         if(request.getText().length() > 200){
             throw new MyException(ErrorCode.REVIEW_TEXT_TOO_LONG);
         }
+    }
+
+    /**
+     * 리뷰 리스트 조회 by userId
+     * sort : 최신 순
+     */
+    public Page<ReviewDto> reviewList(String userId, Integer page){
+        PageRequest pageRequest = PageRequest.of(page, PageConst.REVIEW_LIST_PAGE_SIZE);
+        Page<ReviewEntity> findList = reviewRepository.findByUserIdOrderByCreatedAtDesc(userId, pageRequest);
+
+        if(findList.getSize() == 0){
+            throw new MyException(ErrorCode.REVIEW_NOT_FOUND);
+        }
+        return findList.map(review -> ReviewDto.fromEntity(review));
     }
 
 
