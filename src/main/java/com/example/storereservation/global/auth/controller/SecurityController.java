@@ -13,11 +13,13 @@ public class SecurityController {
 
     @GetMapping("/exception/auth-denied")
     public void accessDenied() {
+        log.info("ACCESS_DENIED - SecurityController");
         throw new MyException(ErrorCode.ACCESS_DENIED);
     }
 
     @GetMapping("/exception/unauthorized")
     public void unauthorized() {
+        log.info("LOGIN_REQIRED - SecurityController");
         throw new MyException(ErrorCode.LOGIN_REQUIRED);
     }
 }

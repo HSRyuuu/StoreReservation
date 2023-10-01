@@ -15,7 +15,7 @@ import java.io.IOException;
 public class MyAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-        log.info("[로그인이 되지 않았습니다.] <MyAuthenticationEntryPoint> -> /exception/unauthorized");
+        log.info("[로그인이 되지 않았습니다.] MyAuthenticationEntryPoint -> /exception/unauthorized");
         response.sendRedirect("/exception/unauthorized");
     }
 }
