@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RequiredArgsConstructor
-@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 @RestController
 public class ReservationUserController {
     private final ReservationService reservationService;
@@ -33,9 +32,6 @@ public class ReservationUserController {
     @PostMapping("/reservation/request")
     public ResponseEntity<?> reservation(@RequestBody MakeReservation.Request request,
                                          @AuthenticationPrincipal UserEntity user){
-        if(ObjectUtils.isEmpty(user)){
-            throw new MyException(ErrorCode.LOGIN_REQUIRED);
-        }
         request.setUserId(user.getUserId());
         ReservationDto reservationDto = reservationService.makeReservation(request);
 

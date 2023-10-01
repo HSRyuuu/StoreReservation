@@ -6,7 +6,6 @@ spring:
     url: jdbc:mariadb://localhost:3306/srm_db
     username: hsryu
     password: hsryu98
-
   jpa:
     hibernate:
       ddl-auto: update

@@ -7,13 +7,15 @@ import com.example.storereservation.domain.review.service.ReviewService;
 import com.example.storereservation.domain.store.dto.ListQueryInput;
 import com.example.storereservation.domain.store.dto.StoreDetail;
 import com.example.storereservation.domain.store.service.StoreService;
-import com.example.storereservation.global.type.ReviewSortType;
 import com.example.storereservation.global.type.StoreSortType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RequiredArgsConstructor
