@@ -4,32 +4,34 @@ import com.example.storereservation.domain.review.dto.AddReview;
 import com.example.storereservation.domain.review.dto.EditReview;
 import com.example.storereservation.domain.review.dto.ReviewDto;
 import com.example.storereservation.domain.review.service.ReviewService;
-import com.example.storereservation.domain.store.service.StoreService;
 import com.example.storereservation.domain.user.persist.UserEntity;
 import com.example.storereservation.global.exception.ErrorCode;
 import com.example.storereservation.global.exception.MyException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
+@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 @RestController
 public class ReviewController {
 
     private final ReviewService reviewService;
-    private final StoreService storeService;
 
     /**
      * 리뷰 쓰기
      */
+    @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping("/review/add/{reservationId}")
     public ResponseEntity<?> addReview(@PathVariable Long reservationId,
                                        @RequestBody AddReview.Request request,
-                                       @AuthenticationPrincipal UserDetails user){
-        ReviewDto reviewDto = reviewService.addReview(reservationId, user.getUsername(), request);
+                                       @AuthenticationPrincipal UserEntity user){
+        ReviewDto reviewDto = reviewService.addReview(reservationId, user.getUserId(), request);
 
         return ResponseEntity.ok(AddReview.Response.fromDto(reviewDto));
     }
@@ -37,6 +39,7 @@ public class ReviewController {
     /**
      * 내가 쓴 리뷰 리스트 확인
      */
+    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/review/list/{userId}")
     public ResponseEntity<?> reviewList(@PathVariable String userId,
                                         @RequestParam(value = "p", defaultValue = "1") Integer page,
@@ -52,6 +55,7 @@ public class ReviewController {
     /**
      * 리뷰 수정
      */
+    @PreAuthorize("hasRole('ROLE_USER')")
     @PutMapping("/review/edit/{reviewId}")
     public ResponseEntity<?> editReview(@PathVariable Long reviewId,
                                         @RequestBody EditReview.Request request,

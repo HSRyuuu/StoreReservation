@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class MyExceptionHandler {
 
     @ExceptionHandler(MyException.class)
-    protected ErrorResponse handleCustomException(MyException e){
+    protected ErrorResponse handleMyException(MyException e){
         ErrorResponse errorResponse = new ErrorResponse(e.getErrorCode());
         return errorResponse;
     }

@@ -13,12 +13,15 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RequiredArgsConstructor
+@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 @RestController
 public class ReservationUserController {
     private final ReservationService reservationService;
@@ -26,6 +29,7 @@ public class ReservationUserController {
     /**
      * 예약 요청
      */
+    @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping("/reservation/request")
     public ResponseEntity<?> reservation(@RequestBody MakeReservation.Request request,
                                          @AuthenticationPrincipal UserEntity user){
@@ -43,6 +47,7 @@ public class ReservationUserController {
      * 정렬 : 최신 순
      * @param user : 로그인 된 유저
      */
+    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/reservation/list")
     public ResponseEntity<?> reservationListForUser(@RequestParam(value = "p", defaultValue = "1") Integer page,
                                                     @AuthenticationPrincipal UserEntity user){
@@ -55,6 +60,7 @@ public class ReservationUserController {
      * @param status : 예약 진행 상태 ReservationStatus(enum)
      * @param user : 로그인 된 유저
      */
+    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/reservation/list/{status}")
     public ResponseEntity<?> reservationListForUserByStatus(@PathVariable String status,
                                                             @RequestParam(value = "p", defaultValue = "1") Integer page,
@@ -66,7 +72,7 @@ public class ReservationUserController {
     }
 
     /**
-     * 도착 확인
+     * 매장 도착 확인
      * @param input (reservationId, phoneNumberLast4)
      */
     @PostMapping("/reservation/arrived")

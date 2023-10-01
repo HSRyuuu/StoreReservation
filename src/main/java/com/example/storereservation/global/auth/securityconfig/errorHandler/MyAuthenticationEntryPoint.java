@@ -1,6 +1,5 @@
 package com.example.storereservation.global.auth.securityconfig.errorHandler;
 
-import com.example.storereservation.global.exception.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;

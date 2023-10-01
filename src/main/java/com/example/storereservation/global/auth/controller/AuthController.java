@@ -27,19 +27,8 @@ import java.util.Collections;
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final UserService userService;
-    private final PartnerService partnerService;
     private final AuthService authService;
     private final TokenProvider tokenProvider;
-
-    /**
-     * 유저 회원가입
-     */
-    @PostMapping("/user/register")
-    public ResponseEntity<?> registerUser(@RequestBody RegisterUser.Request request) {
-        UserDto registeredUser = userService.register(request);
-        return ResponseEntity.ok(RegisterUser.Response.fromDto(registeredUser));
-    }
 
     /**
      * 유저 로그인
@@ -56,17 +45,7 @@ public class AuthController {
     }
 
     /**
-     * 파트너 회원가입
-     */
-    @PostMapping("/partner/register")
-    public ResponseEntity<?> registerPartner(@RequestBody RegisterPartner.Request request) {
-        PartnerDto registeredManager = partnerService.register(request);
-
-        return ResponseEntity.ok(RegisterPartner.Response.fromDto(registeredManager));
-    }
-
-    /**
-     * 유저 로그인
+     *  파트너 로그인
      */
     @PostMapping("/partner/login")
     public ResponseEntity<?> partnerLogin(@RequestBody LoginInput input) {

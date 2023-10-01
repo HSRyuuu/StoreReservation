@@ -61,8 +61,49 @@
 - `MyExceptionHandler`을 통해 예외 발생 시 예외 응답을 반환한다.
 
 ## 테스트(TEST)
-- 모든 service 클래스 메서드 테스트
+- service 로직 테스트코드 작성
 - JUnit5
+
+## URI 설계
+
+#### 유저 인증
+- `POST` `/user/register` : 유저 회원가입
+- `POST` `/user/login` : 유저 로그인
+#### 매장 - 유저
+- `GET` `/store/list` : 매장 리스트 조회
+- `GET` `/store/detail` : 매장 상세 조회
+- `GET` `/store/review` : 매장 리뷰 조회
+#### 예약 - 유저
+- `POST` `/reservation/request` : 예약 요청
+- `GET` `/reservation/list` : 예약 내역 모두 보기
+- `GET` `/reservation/list/{status}` : 예약 내역 모두 보기(예약 상태 별)
+- `GET` `/reservation/detail/{reservationId}` : 예약 상세 정보 보기 (파트너 로그인 시, 유저 로그인 시에 따라 다르게 동작)
+- `POST` `/reservation/arrived` : 매장 도착 확인
+#### 리뷰 - 유저
+- `POST` `/review/add/{reservationId}` : 리뷰 쓰기
+- `GET` `/review/list/{userId}` : 내가 쓴 리뷰 리스트 확인
+- `PUT` `/review/edit/{reviewId}` : 리뷰 수정
+
+---
+
+#### 파트너 인증
+- `POST` `/partner/register` : 파트너 회원가입
+- `POST` `/partner/login` : 파트너 로그인
+#### 매장 - 파트너
+- `POST` `/partner/register-store/{partnerId}` : 매장 등록
+- `PUT` `/partner/edit-store/{partnerId}` : 매장 수정
+#### 예약 - 파트너
+- `GET` `/reservation/detail/{reservationId}` : 예약 상세 정보 보기 (파트너 로그인 시, 유저 로그인 시에 따라 다르게 동작)
+- `GET` `/partner/reservation/list` : 파트너 - 자신의 상점 예약 내역 모두 보기
+- `PUT` `/partner/reservation/{reservationId}` : 예약 상태 변경(승인, 거절, 이용완료 등)
+
+
+
+
+
+
+
+
 
 
 

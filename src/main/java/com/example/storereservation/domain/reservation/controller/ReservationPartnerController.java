@@ -10,14 +10,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Slf4j
 @RequiredArgsConstructor
+@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 @RestController
 public class ReservationPartnerController {
     private final ReservationService reservationService;
@@ -30,6 +32,7 @@ public class ReservationPartnerController {
      * @param page 페이지 (default = 1)
      * @param partner 로그인 된 파트너
      */
+    @PreAuthorize("hasRole('ROLE_PARTNER')")
     @GetMapping("/partner/reservation/list")
     public ResponseEntity<?> reservationListForPartner(@RequestParam(required = false) String status,
                                                                @RequestParam(required = false)@DateTimeFormat(pattern = "yyyy-MM-dd")LocalDate date,
@@ -60,6 +63,7 @@ public class ReservationPartnerController {
      * @param input : 변경하고자하는 상태
      * @param partner : 로그인 된 파트너
      */
+    @PreAuthorize("hasRole('ROLE_PARTNER')")
     @PutMapping("/partner/reservation/{reservationId}")
     public ResponseEntity<?> changeReservationStatus(@PathVariable("reservationId") Long id,
                                                      @RequestBody ChangeReservationInput input,
