@@ -44,7 +44,7 @@ public class ReviewController {
         if(!user.getUserId().equals(userId)){
             throw new MyException(ErrorCode.NO_AUTHORITY_ERROR);
         }
-        Page<ReviewDto> list = reviewService.reviewList(userId, page - 1);
+        Page<ReviewDto> list = reviewService.reviewListByUserId(userId, page - 1);
 
         return ResponseEntity.ok(list);
     }

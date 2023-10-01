@@ -18,12 +18,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Slf4j
 @RequiredArgsConstructor
+@Transactional
 @Service
 public class ReservationService {
     private final ReservationRepository reservationRepository;

@@ -2,8 +2,6 @@ package com.example.storereservation.domain.review.service;
 
 import com.example.storereservation.domain.reservation.dto.MakeReservation;
 import com.example.storereservation.domain.reservation.dto.ReservationDto;
-import com.example.storereservation.domain.reservation.persist.ReservationEntity;
-import com.example.storereservation.domain.reservation.persist.ReservationRepository;
 import com.example.storereservation.domain.reservation.service.ReservationService;
 import com.example.storereservation.domain.reservation.type.ReservationStatus;
 import com.example.storereservation.domain.review.dto.AddReview;
@@ -11,12 +9,10 @@ import com.example.storereservation.domain.review.dto.EditReview;
 import com.example.storereservation.domain.review.dto.ReviewDto;
 import com.example.storereservation.domain.review.persist.ReviewEntity;
 import com.example.storereservation.domain.review.persist.ReviewRepository;
-import com.example.storereservation.domain.store.persist.StoreEntity;
 import com.example.storereservation.domain.store.persist.StoreRepository;
 import com.example.storereservation.global.exception.ErrorCode;
 import com.example.storereservation.global.exception.MyException;
 import lombok.extern.slf4j.Slf4j;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +26,6 @@ import java.time.LocalTime;
 
 import static com.example.storereservation.testsetting.TestConst.*;
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
 @SpringBootTest
@@ -239,7 +234,7 @@ class ReviewServiceTest {
         String userId = TEST_USER_ID;
 
         //when
-        Page<ReviewDto> list = reviewService.reviewList(userId, 0);
+        Page<ReviewDto> list = reviewService.reviewListByUserId(userId, 0);
 
         //then
         for (ReviewDto reviewDto : list) {
@@ -285,5 +280,16 @@ class ReviewServiceTest {
         //then
         assertThat(editedReview.getText()).isEqualTo("edit");
         assertThat(editedReview.getRating()).isEqualTo(0);
+    }
+
+    @Test
+    @DisplayName("reviewListByStoreName => POSTMAN으로 테스트")
+    void reviewListByStoreName() {
+        //given
+
+        //when
+
+        //then
+
     }
 }

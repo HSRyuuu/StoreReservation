@@ -13,6 +13,7 @@ import com.example.storereservation.domain.user.persist.UserRepository;
 import com.example.storereservation.global.exception.ErrorCode;
 import com.example.storereservation.global.exception.MyException;
 import com.example.storereservation.global.type.PageConst;
+import com.example.storereservation.global.type.ReviewSortType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 
 @RequiredArgsConstructor
+@Transactional
 @Service
 public class ReviewService {
 
@@ -90,7 +92,7 @@ public class ReviewService {
      * 리뷰 리스트 조회 by userId
      * sort : 최신 순
      */
-    public Page<ReviewDto> reviewList(String userId, Integer page){
+    public Page<ReviewDto> reviewListByUserId(String userId, Integer page){
         PageRequest pageRequest = PageRequest.of(page, PageConst.REVIEW_LIST_PAGE_SIZE);
         Page<ReviewEntity> findList = reviewRepository.findByUserIdOrderByCreatedAtDesc(userId, pageRequest);
 
@@ -101,9 +103,30 @@ public class ReviewService {
     }
 
     /**
+     * 리뷰 리스트 조회 by storeName
+     * sort : 최신 순, 별점 높은 순, 별점 낮은 순
+     */
+    public Page<ReviewDto> reviewListByStoreName(String storeName, ReviewSortType sortType, Integer page){
+        PageRequest pageRequest = PageRequest.of(page, PageConst.REVIEW_LIST_PAGE_SIZE);
+        Page<ReviewEntity> findList;
+
+        if(sortType.equals(ReviewSortType.RATING_DESC)){//별점 높은 순
+            findList = reviewRepository.findByStoreNameOrderByRatingDesc(storeName, pageRequest);
+        } else if (sortType.equals(ReviewSortType.RATING_ASC)){ //별점 낮은 순
+            findList = reviewRepository.findByStoreNameOrderByRatingAsc(storeName, pageRequest);
+        }else{//default : 최신 순
+            findList = reviewRepository.findByStoreNameOrderByCreatedAtDesc(storeName, pageRequest);
+        }
+
+        if(findList.getNumberOfElements() == 0){
+            throw new MyException(ErrorCode.REVIEW_NOT_FOUND);
+        }
+        return findList.map(review -> ReviewDto.fromEntity(review));
+    }
+
+    /**
      * 리뷰 수정
      */
-    @Transactional
     public ReviewDto editReview(Long reviewId, String userId, EditReview.Request request){
         ReviewEntity reviewEntity = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new MyException(ErrorCode.REVIEW_NOT_FOUND));
