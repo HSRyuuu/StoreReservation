@@ -11,8 +11,10 @@
 # 요구사항
 
 ## 인증 (Auth)
-#### 회원가입, 로그인은 `global/auth`패키지에서 관리된다.
-- User와 Partner는 모두 `AuthService`를 통해 회원가입, 로그인 할 수 있다.
+#### 회원가입
+- User와 Partner은 각각  UserService, PartnerService를 통해 회원가입 할 수 있다.
+#### 인증 관련은 `global/auth` 패키지에서 관리된다.
+- User와 Partner는 모두 `AuthService`을 통해 로그인 할 수 있다.
 - User는 `MemberType=ROLE_USER`을 가진다. 
 - Partner는 `MemberType=ROLE_PARTNER`을 가진다. 
 - Partner는 User의 서비스까지 모두 접근 가능하다.
@@ -60,10 +62,6 @@
 - `MyException`을 통해 커스텀 예외를 발생시키며, 
 - `MyExceptionHandler`을 통해 예외 발생 시 예외 응답을 반환한다.
 
-## 테스트(TEST)
-- service 로직 테스트코드 작성
-- JUnit5
-
 ## URI 설계
 
 #### 유저 인증
@@ -97,8 +95,12 @@
 - `GET` `/partner/reservation/list` : 파트너 - 자신의 상점 예약 내역 모두 보기
 - `PUT` `/partner/reservation/{reservationId}` : 예약 상태 변경(승인, 거절, 이용완료 등)
 
+## 테스트(TEST)
+- service 로직 테스트 코드 작성
+- JUnit5
 
-
+## Swagger
+- `/swagger-ui.html`에서 Swagger API 명세를 확인하실 수 있습니다. 
 
 
 

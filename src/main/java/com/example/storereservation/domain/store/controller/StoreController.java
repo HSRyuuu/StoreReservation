@@ -8,6 +8,8 @@ import com.example.storereservation.domain.store.dto.StoreListQuery;
 import com.example.storereservation.domain.store.dto.StoreDetail;
 import com.example.storereservation.domain.store.service.StoreService;
 import com.example.storereservation.global.type.StoreSortType;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -30,6 +32,7 @@ public class StoreController {
      * @param page : 페이지
      * @param input : storeName, sortType( ALL, ALPHABET, RATING, RATING_COUNT, DISTANCE)
      */
+    @ApiOperation(value = "매장 검색", notes = "@RequestBody에 lat, lnt 값을 포함시키고 sortType=DISTANCE로 설정할 경우 가까운 거리 순으로 조회된다.")
     @GetMapping("/store/list")
     public ResponseEntity<?> storeList(@RequestParam(value = "p", defaultValue = "1") Integer page,
                                        @RequestBody StoreListQuery input) {
@@ -44,6 +47,7 @@ public class StoreController {
      * 매장 상세
      * @param name : 매장 명
      */
+    @ApiOperation("매장 상세 보기")
     @GetMapping("/store/detail")
     public ResponseEntity<?> storeDetail(@RequestParam String name) {
         StoreDetail findStore = storeService.findByStoreName(name);
@@ -55,6 +59,7 @@ public class StoreController {
      * @param input : storeName, sort[LATEST(최신 순) / RATING_DESC(별점 높은 순) / RATING_ASC(별점 낮은 순)]
      * @param page : default=1
      */
+    @ApiOperation("리뷰 목록 확인 - 매장 별")
     @GetMapping("/store/review")
     public ResponseEntity<?> reviewListByStoreId(@RequestBody ReviewListInput input,
                                                  @RequestParam(name = "p", defaultValue = "1") Integer page){

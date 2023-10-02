@@ -12,6 +12,7 @@ import com.example.storereservation.domain.user.dto.RegisterUser;
 import com.example.storereservation.domain.user.dto.UserDto;
 import com.example.storereservation.domain.user.persist.UserEntity;
 import com.example.storereservation.domain.user.service.UserService;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +34,7 @@ public class AuthController {
     /**
      * 유저 로그인
      */
+    @ApiOperation(value = "유저 로그인", notes = "로그인 시 id와 JWT 토큰이 반환된다.")
     @PostMapping("/user/login")
     public ResponseEntity<?> userLogin(@RequestBody LoginInput input) {
         UserEntity loginUser = authService.authenticateUser(input);
@@ -47,6 +49,7 @@ public class AuthController {
     /**
      *  파트너 로그인
      */
+    @ApiOperation(value = "파트너 로그인", notes = "로그인 시 id와 JWT 토큰이 반환된다.")
     @PostMapping("/partner/login")
     public ResponseEntity<?> partnerLogin(@RequestBody LoginInput input) {
         PartnerEntity loginPartner = authService.authenticatePartner(input);

@@ -7,6 +7,8 @@ import com.example.storereservation.domain.review.service.ReviewService;
 import com.example.storereservation.domain.user.persist.UserEntity;
 import com.example.storereservation.global.exception.ErrorCode;
 import com.example.storereservation.global.exception.MyException;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +25,7 @@ public class ReviewController {
     /**
      * 리뷰 쓰기
      */
+    @ApiOperation("리뷰 쓰기")
     @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping("/review/add/{reservationId}")
     public ResponseEntity<?> addReview(@PathVariable Long reservationId,
@@ -36,6 +39,7 @@ public class ReviewController {
     /**
      * 내가 쓴 리뷰 리스트 확인
      */
+    @ApiOperation(value = "리뷰 리스트 확인 - 유저")
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/review/list/{userId}")
     public ResponseEntity<?> reviewList(@PathVariable String userId,
@@ -52,6 +56,7 @@ public class ReviewController {
     /**
      * 리뷰 수정
      */
+    @ApiOperation(value = "리뷰 수정")
     @PreAuthorize("hasRole('ROLE_USER')")
     @PutMapping("/review/edit/{reviewId}")
     public ResponseEntity<?> editReview(@PathVariable Long reviewId,

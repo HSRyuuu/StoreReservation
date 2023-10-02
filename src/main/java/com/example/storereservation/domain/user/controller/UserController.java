@@ -4,6 +4,7 @@ import com.example.storereservation.domain.reservation.service.ReservationServic
 import com.example.storereservation.domain.user.dto.RegisterUser;
 import com.example.storereservation.domain.user.dto.UserDto;
 import com.example.storereservation.domain.user.service.UserService;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,7 @@ public class UserController {
     /**
      * 유저 회원가입
      */
+    @ApiOperation("유저 회원가입")
     @PostMapping("/user/register")
     public ResponseEntity<?> registerUser(@RequestBody RegisterUser.Request request) {
         UserDto registeredUser = userService.register(request);

@@ -5,6 +5,7 @@ import com.example.storereservation.domain.reservation.dto.ChangeReservationInpu
 import com.example.storereservation.domain.reservation.dto.ReservationDto;
 import com.example.storereservation.domain.reservation.service.ReservationService;
 import com.example.storereservation.domain.reservation.type.ReservationStatus;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -30,6 +31,8 @@ public class ReservationPartnerController {
      * @param page 페이지 (default = 1)
      * @param partner 로그인 된 파트너
      */
+    @ApiOperation(value = "예약 내역 모두 보기", notes = "로그인 되어있는 파트너의 상점의 예약 내역 조회. 예약 상태, 날짜 별로 조회할 수 있다. \n" +
+            "STATUS : REQUESTING, REFUSED, CONFIRM, ARRIVED, USE_COMPLETE, NO_SHOW")
     @PreAuthorize("hasRole('ROLE_PARTNER')")
     @GetMapping("/partner/reservation/list")
     public ResponseEntity<?> reservationListForPartner(@RequestParam(required = false) String status,
@@ -61,6 +64,7 @@ public class ReservationPartnerController {
      * @param input : 변경하고자하는 상태
      * @param partner : 로그인 된 파트너
      */
+    @ApiOperation(value = "예약 상태 변경", notes = "status : REQUESTING, REFUSED, CONFIRM, ARRIVED, USE_COMPLETE, NO_SHOW")
     @PreAuthorize("hasRole('ROLE_PARTNER')")
     @PutMapping("/partner/reservation/{reservationId}")
     public ResponseEntity<?> changeReservationStatus(@PathVariable("reservationId") Long id,
