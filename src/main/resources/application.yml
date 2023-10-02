@@ -6,6 +6,7 @@ spring:
     url: jdbc:mariadb://localhost:3306/srm_db
     username: hsryu
     password: hsryu98
+
   jpa:
     hibernate:
       ddl-auto: update
@@ -16,6 +17,11 @@ spring:
 
   jwt:
     secret: 66WY7ZiE7Iud
+
+mybatis:
+  mapper-locations: mybatis/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
 
 logging:
   level:

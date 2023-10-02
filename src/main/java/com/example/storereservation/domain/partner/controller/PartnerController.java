@@ -1,7 +1,7 @@
 package com.example.storereservation.domain.partner.controller;
 
-import com.example.storereservation.domain.partner.dto.AddStore;
-import com.example.storereservation.domain.partner.dto.EditStore;
+import com.example.storereservation.domain.store.dto.AddStore;
+import com.example.storereservation.domain.store.dto.EditStore;
 import com.example.storereservation.domain.partner.dto.PartnerDto;
 import com.example.storereservation.domain.partner.dto.RegisterPartner;
 import com.example.storereservation.domain.partner.persist.PartnerEntity;
@@ -13,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 

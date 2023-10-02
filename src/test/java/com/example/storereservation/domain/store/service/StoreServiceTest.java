@@ -1,6 +1,6 @@
 package com.example.storereservation.domain.store.service;
 
-import com.example.storereservation.domain.partner.dto.AddStore;
+import com.example.storereservation.domain.store.dto.AddStore;
 import com.example.storereservation.domain.partner.dto.RegisterPartner;
 import com.example.storereservation.domain.partner.service.PartnerService;
 import com.example.storereservation.domain.store.dto.StoreDetail;

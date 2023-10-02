@@ -1,4 +1,4 @@
-package com.example.storereservation.domain.partner.dto;
+package com.example.storereservation.domain.store.dto;
 
 
 import com.example.storereservation.domain.store.dto.StoreDto;

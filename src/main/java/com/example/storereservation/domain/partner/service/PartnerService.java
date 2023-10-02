@@ -1,7 +1,7 @@
 package com.example.storereservation.domain.partner.service;
 
-import com.example.storereservation.domain.partner.dto.AddStore;
-import com.example.storereservation.domain.partner.dto.EditStore;
+import com.example.storereservation.domain.store.dto.AddStore;
+import com.example.storereservation.domain.store.dto.EditStore;
 import com.example.storereservation.domain.store.dto.StoreDto;
 import com.example.storereservation.domain.store.persist.StoreEntity;
 import com.example.storereservation.domain.store.persist.StoreRepository;

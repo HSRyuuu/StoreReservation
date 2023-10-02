@@ -1,6 +1,9 @@
 package com.example.storereservation.domain.store.service;
 
 import com.example.storereservation.domain.review.dto.ReviewDto;
+import com.example.storereservation.domain.store.dto.StoreDto;
+import com.example.storereservation.domain.store.dto.StoreListQuery;
+import com.example.storereservation.domain.store.mybatis.MyBatisStoreRepository;
 import com.example.storereservation.global.exception.ErrorCode;
 import com.example.storereservation.global.exception.MyException;
 import com.example.storereservation.global.type.PageConst;
@@ -16,6 +19,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -24,6 +29,7 @@ import javax.transaction.Transactional;
 public class StoreService {
 
     private final StoreRepository storeRepository;
+    private final MyBatisStoreRepository myBatisStoreRepository;
 
     /**
      * 상점 명으로 상점 정보 찾기
@@ -40,15 +46,28 @@ public class StoreService {
      *  SortType : ALL / ALPHABET / RATING / REVIEW_COUNTS / DISTANCE
      *  page : constant로 저장
      */
-    public Page<StoreDetail> getStoreListByStoreName(String storeName, StoreSortType storeSortType, Integer page){
-        PageRequest pageRequest = getPageRequestBySortTypeAndPage(storeSortType, page);
-        Page<StoreEntity> findStores = storeRepository.findByStoreNameContaining(storeName, pageRequest);
+    public Page<StoreDetail> getStoreListByStoreNameAndSortType(StoreListQuery input, Integer page){
 
-        if(findStores.getSize() == 0){
+        PageRequest pageRequest = getPageRequestBySortTypeAndPage(input.getSortType(), page);
+        Page<StoreEntity> findStores = storeRepository.findByStoreNameContaining(input.getStoreName(), pageRequest);
+
+        if(findStores.getNumberOfElements() == 0){
             throw new MyException(ErrorCode.STORE_NO_SEARCH_RESULT);
         }
 
         return findStores.map(store -> StoreDetail.fromEntity(store));
+    }
+    /**
+     *  상점 명으로 상점 리스트 찾기
+     *  SortType : DISTANCE
+     */
+    public List<StoreDetail> getStoreListByStoreNameAndDistance(StoreListQuery input, Integer page){
+        List<StoreDto> findStores = myBatisStoreRepository.findByStoreNameOrderByDistance(input, page);
+        if(findStores.isEmpty()){
+            throw new MyException(ErrorCode.STORE_NO_SEARCH_RESULT);
+        }
+
+        return findStores.stream().map(storeDto -> StoreDetail.fromDto(storeDto)).collect(Collectors.toList());
     }
 
     private PageRequest getPageRequestBySortTypeAndPage(StoreSortType storeSortType, Integer page){
@@ -59,8 +78,6 @@ public class StoreService {
             return PageRequest.of(page, PageConst.STORE_LIST_PAGE_SIZE, Sort.by("rating").descending());
         }else if(storeSortType == StoreSortType.RATING_COUNT){
             return PageRequest.of(page, PageConst.STORE_LIST_PAGE_SIZE, Sort.by("ratingCount").descending());
-        } else if(storeSortType == StoreSortType.DISTANCE){
-            //TODO 거리 ???
         }
         return pageRequest;
     }

@@ -21,11 +21,16 @@ public class StoreDto {
     private String storeAddr;
     private String text;
 
+    private double lat;
+    private double lnt;
+    private double distance;
+
     private double rating;
     private Long ratingCount;
 
     private LocalDateTime createAt;
     private LocalDateTime updateAt;
+
 
 
 

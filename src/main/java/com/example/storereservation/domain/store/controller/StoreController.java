@@ -4,7 +4,7 @@ import com.example.storereservation.domain.review.ReviewListInput;
 import com.example.storereservation.domain.review.dto.ReviewDetail;
 import com.example.storereservation.domain.review.dto.ReviewDto;
 import com.example.storereservation.domain.review.service.ReviewService;
-import com.example.storereservation.domain.store.dto.ListQueryInput;
+import com.example.storereservation.domain.store.dto.StoreListQuery;
 import com.example.storereservation.domain.store.dto.StoreDetail;
 import com.example.storereservation.domain.store.service.StoreService;
 import com.example.storereservation.global.type.StoreSortType;
@@ -29,19 +29,15 @@ public class StoreController {
      * 매장 검색
      * @param page : 페이지
      * @param input : storeName, sortType( ALL, ALPHABET, RATING, RATING_COUNT, DISTANCE)
-     *              TODO : 거리순(Distance)
      */
     @GetMapping("/store/list")
     public ResponseEntity<?> storeList(@RequestParam(value = "p", defaultValue = "1") Integer page,
-                                       @RequestBody ListQueryInput input) {
-        Page<StoreDetail> findStores =
-                storeService.getStoreListByStoreName(
-                        input.getStoreName(),
-                        StoreSortType.valueOf(input.getSortType()),
-                        page - 1);
-
-
-        return ResponseEntity.ok(findStores);
+                                       @RequestBody StoreListQuery input) {
+        if(input.getSortType().equals(StoreSortType.DISTANCE)){
+            return ResponseEntity.ok(storeService.getStoreListByStoreNameAndDistance(input, page - 1));
+        }else{
+            return ResponseEntity.ok(storeService.getStoreListByStoreNameAndSortType(input, page - 1));
+        }
     }
 
     /**

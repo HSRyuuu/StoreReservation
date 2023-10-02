@@ -1,6 +1,6 @@
 package com.example.storereservation.domain.store.persist;
 
-import com.example.storereservation.domain.partner.dto.EditStore;
+import com.example.storereservation.domain.store.dto.EditStore;
 import lombok.*;
 import org.springframework.util.StringUtils;
 
@@ -25,6 +25,8 @@ public class StoreEntity {
     private String storeAddr;
     private String text;
 
+    private double lat;
+    private double lnt;
 
     private double rating;
     private Long ratingCount;
