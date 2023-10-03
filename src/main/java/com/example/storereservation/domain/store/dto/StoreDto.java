@@ -31,9 +31,6 @@ public class StoreDto {
     private LocalDateTime createAt;
     private LocalDateTime updateAt;
 
-
-
-
     public static StoreDto fromEntity(StoreEntity store){
         return StoreDto.builder()
                 .id(store.getId())
@@ -41,6 +38,8 @@ public class StoreDto {
                 .storeName(store.getStoreName())
                 .storeAddr(store.getStoreAddr())
                 .text(store.getText())
+                .lat(store.getLat())
+                .lnt(store.getLnt())
                 .rating(store.getRating())
                 .ratingCount(store.getRatingCount())
                 .createAt(store.getCreateAt())

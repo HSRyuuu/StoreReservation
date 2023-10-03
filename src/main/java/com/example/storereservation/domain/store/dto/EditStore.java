@@ -22,17 +22,9 @@ public class EditStore {
         private String storeAddr;
         private String text;
 
-        public static StoreEntity toEntity(Request request, String partnerId){
-            return StoreEntity.builder()
-                    .partnerId(partnerId)
-                    .storeName(request.getStoreName())
-                    .storeAddr(request.getStoreAddr())
-                    .text(request.getText())
-                    .createAt(LocalDateTime.now())
-                    .rating(0.0)
-                    .ratingCount(0L)
-                    .build();
-        }
+        private double lat;
+        private double lnt;
+
     }
 
     @Data
@@ -45,6 +37,10 @@ public class EditStore {
         private String storeName;
         private String storeAddr;
         private String text;
+
+        private double lat;
+        private double lnt;
+
         private LocalDateTime createAt;
         private LocalDateTime updateAt;
 
@@ -54,6 +50,8 @@ public class EditStore {
                     .storeName(storeDto.getStoreName())
                     .storeAddr(storeDto.getStoreAddr())
                     .text(storeDto.getText())
+                    .lat(storeDto.getLat())
+                    .lnt(storeDto.getLnt())
                     .createAt(storeDto.getCreateAt())
                     .updateAt(storeDto.getUpdateAt())
                     .build();

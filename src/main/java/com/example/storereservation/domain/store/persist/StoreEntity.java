@@ -44,6 +44,10 @@ public class StoreEntity {
         if(StringUtils.hasText(request.getText())){
             this.text = request.getText();
         }
+        if(request.getLat() != 0 && request.getLnt() != 0){
+            this.lat = request.getLat();
+            this.lnt = request.getLnt();
+        }
         this.updateAt = LocalDateTime.now();
     }
 

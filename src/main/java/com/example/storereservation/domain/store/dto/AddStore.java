@@ -22,12 +22,17 @@ public class AddStore {
         private String storeAddr;
         private String text;
 
+        private double lat;
+        private double lnt;
+
         public static StoreEntity toEntity(Request request, String partnerId){
             return StoreEntity.builder()
                     .partnerId(partnerId)
                     .storeName(request.getStoreName())
                     .storeAddr(request.getStoreAddr())
                     .text(request.getText())
+                    .lat(request.getLat())
+                    .lnt(request.getLnt())
                     .createAt(LocalDateTime.now())
                     .rating(0.0)
                     .ratingCount(0L)

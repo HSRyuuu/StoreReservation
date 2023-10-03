@@ -41,9 +41,15 @@ public class PartnerController {
      * @param request   : 매장 정보 입력
      */
     @ApiOperation(value = "매장 등록", notes = "파트너 ID 하나 당 하나의 매장만 등록할 수 있다.")
+    @PreAuthorize("hasRole('ROLE_PARTNER')")
     @PostMapping("/partner/register-store/{partnerId}")
     public ResponseEntity<?> registerStore(@PathVariable String partnerId,
-                                           @RequestBody AddStore.Request request) {
+                                           @RequestBody AddStore.Request request,
+                                           @AuthenticationPrincipal PartnerEntity partner) {
+        if(!partnerId.equals(partner.getPartnerId())){
+            throw new MyException(ErrorCode.STORE_PARTNER_NOT_MATCH);
+        }
+
         StoreDto savedStore = partnerService.addStore(partnerId, request);
         return ResponseEntity.ok(AddStore.Response.fromDto(savedStore));
     }
