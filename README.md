@@ -11,6 +11,12 @@
 # 요구사항
 
 ## 인증 (Auth)
+이 프로그램의 기능을 이용하기 위해서는 회원가입과 로그인을 우선 해야한다.
+- 유저 회원가입 : `/user/register`
+- 유저 로그인 : `/user/login`
+- 파트너 회원가입 : `/partner/register`
+- 파트너 로그인 : `/partner/login`
+
 #### 회원가입
 - User와 Partner은 각각  UserService, PartnerService를 통해 회원가입 할 수 있다.
 #### 인증 관련은 `global/auth` 패키지에서 관리된다.
