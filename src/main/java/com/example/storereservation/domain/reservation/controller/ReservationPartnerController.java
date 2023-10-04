@@ -16,6 +16,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -41,12 +42,12 @@ public class ReservationPartnerController {
                                                                @AuthenticationPrincipal PartnerEntity partner){
         Page<ReservationDto> reservationList;
 
-        if(status == null && date == null){
+        if(Objects.isNull(status) && Objects.isNull(date)){
             reservationList = reservationService.listForPartner(partner.getPartnerId(), page - 1);
-        }else if(status != null){
+        }else if(Objects.nonNull(status) && Objects.isNull(date)){
             reservationList = reservationService.listForPartnerByStatus(
                     partner.getPartnerId(), ReservationStatus.of(status), page - 1);
-        }else if(date != null){
+        }else if(Objects.nonNull(date) && Objects.isNull(status)){
             reservationList = reservationService.listForPartnerByDate(
                     partner.getPartnerId(), date, page - 1);
         }else{

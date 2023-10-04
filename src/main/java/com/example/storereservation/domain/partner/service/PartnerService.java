@@ -22,7 +22,7 @@ import javax.transaction.Transactional;
 @RequiredArgsConstructor
 @Transactional
 @Service
-public class PartnerService{
+public class  PartnerService{
 
     private final PartnerRepository partnerRepository;
     private final StoreRepository storeRepository;
