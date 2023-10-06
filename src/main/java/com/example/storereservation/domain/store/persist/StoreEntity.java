@@ -16,9 +16,9 @@ import java.time.LocalDateTime;
 @Builder
 @Entity(name = "STORE")
 public class StoreEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String partnerId;
 
     private String storeName;
@@ -50,7 +50,5 @@ public class StoreEntity {
         }
         this.updateAt = LocalDateTime.now();
     }
-
-
 
 }
