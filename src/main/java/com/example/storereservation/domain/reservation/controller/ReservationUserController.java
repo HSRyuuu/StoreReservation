@@ -7,17 +7,13 @@ import com.example.storereservation.domain.reservation.dto.UserArrivedInput;
 import com.example.storereservation.domain.reservation.service.ReservationService;
 import com.example.storereservation.domain.reservation.type.ReservationStatus;
 import com.example.storereservation.domain.user.persist.UserEntity;
-import com.example.storereservation.global.exception.ErrorCode;
-import com.example.storereservation.global.exception.MyException;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j

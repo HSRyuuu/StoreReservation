@@ -1,15 +1,15 @@
 package com.example.storereservation.domain.store.service;
 
 import com.example.storereservation.domain.review.dto.ReviewDto;
+import com.example.storereservation.domain.store.dto.StoreDetail;
 import com.example.storereservation.domain.store.dto.StoreDto;
 import com.example.storereservation.domain.store.dto.StoreListQuery;
 import com.example.storereservation.domain.store.mybatis.MyBatisStoreRepository;
+import com.example.storereservation.domain.store.persist.StoreEntity;
+import com.example.storereservation.domain.store.persist.StoreRepository;
 import com.example.storereservation.global.exception.ErrorCode;
 import com.example.storereservation.global.exception.MyException;
 import com.example.storereservation.global.type.PageConst;
-import com.example.storereservation.domain.store.dto.StoreDetail;
-import com.example.storereservation.domain.store.persist.StoreEntity;
-import com.example.storereservation.domain.store.persist.StoreRepository;
 import com.example.storereservation.global.type.StoreSortType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

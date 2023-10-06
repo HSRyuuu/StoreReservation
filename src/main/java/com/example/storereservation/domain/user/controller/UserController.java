@@ -1,6 +1,5 @@
 package com.example.storereservation.domain.user.controller;
 
-import com.example.storereservation.domain.reservation.service.ReservationService;
 import com.example.storereservation.domain.user.dto.RegisterUser;
 import com.example.storereservation.domain.user.dto.UserDto;
 import com.example.storereservation.domain.user.service.UserService;

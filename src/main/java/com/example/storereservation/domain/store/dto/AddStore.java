@@ -1,7 +1,6 @@
 package com.example.storereservation.domain.store.dto;
 
 
-import com.example.storereservation.domain.store.dto.StoreDto;
 import com.example.storereservation.domain.store.persist.StoreEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

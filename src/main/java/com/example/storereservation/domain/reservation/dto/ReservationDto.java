@@ -2,9 +2,11 @@ package com.example.storereservation.domain.reservation.dto;
 
 import com.example.storereservation.domain.reservation.persist.ReservationEntity;
 import com.example.storereservation.domain.reservation.type.ReservationStatus;
-import lombok.*;
+import lombok.Builder;
+import lombok.Data;
 
-import javax.persistence.*;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import java.time.LocalDateTime;
 
 @Data

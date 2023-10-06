@@ -2,10 +2,6 @@ package com.example.storereservation.domain.review.dto;
 
 import com.example.storereservation.domain.reservation.persist.ReservationEntity;
 import com.example.storereservation.domain.review.persist.ReviewEntity;
-import com.example.storereservation.domain.user.dto.RegisterUser;
-import com.example.storereservation.domain.user.dto.UserDto;
-import com.example.storereservation.domain.user.persist.UserEntity;
-import com.example.storereservation.global.auth.type.MemberType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

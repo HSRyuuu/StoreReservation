@@ -7,7 +7,6 @@ import com.example.storereservation.domain.review.service.ReviewService;
 import com.example.storereservation.domain.user.persist.UserEntity;
 import com.example.storereservation.global.exception.ErrorCode;
 import com.example.storereservation.global.exception.MyException;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

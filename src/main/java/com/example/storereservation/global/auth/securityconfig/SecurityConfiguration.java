@@ -1,8 +1,8 @@
 package com.example.storereservation.global.auth.securityconfig;
 
-import com.example.storereservation.global.auth.sercurity.AuthenticationFilter;
 import com.example.storereservation.global.auth.securityconfig.errorHandler.MyAccessDeniedHandler;
 import com.example.storereservation.global.auth.securityconfig.errorHandler.MyAuthenticationEntryPoint;
+import com.example.storereservation.global.auth.sercurity.AuthenticationFilter;
 import com.example.storereservation.global.auth.sercurity.JwtExceptionFilter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +17,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import java.util.Arrays;
 

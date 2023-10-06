@@ -2,9 +2,11 @@ package com.example.storereservation.domain.review.persist;
 
 import lombok.*;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 @Getter@Setter
 @AllArgsConstructor

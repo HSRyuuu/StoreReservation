@@ -1,13 +1,9 @@
 package com.example.storereservation.domain.review.dto;
 
-import com.example.storereservation.domain.reservation.persist.ReservationEntity;
-import com.example.storereservation.domain.review.persist.ReviewEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 
 public class EditReview {
 

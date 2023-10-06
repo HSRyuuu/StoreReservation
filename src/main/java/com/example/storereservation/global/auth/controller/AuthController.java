@@ -1,17 +1,11 @@
 package com.example.storereservation.global.auth.controller;
 
+import com.example.storereservation.domain.partner.persist.PartnerEntity;
+import com.example.storereservation.domain.user.persist.UserEntity;
 import com.example.storereservation.global.auth.dto.AuthResponse;
 import com.example.storereservation.global.auth.dto.LoginInput;
 import com.example.storereservation.global.auth.sercurity.TokenProvider;
 import com.example.storereservation.global.auth.service.AuthService;
-import com.example.storereservation.domain.partner.dto.PartnerDto;
-import com.example.storereservation.domain.partner.dto.RegisterPartner;
-import com.example.storereservation.domain.partner.persist.PartnerEntity;
-import com.example.storereservation.domain.partner.service.PartnerService;
-import com.example.storereservation.domain.user.dto.RegisterUser;
-import com.example.storereservation.domain.user.dto.UserDto;
-import com.example.storereservation.domain.user.persist.UserEntity;
-import com.example.storereservation.domain.user.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

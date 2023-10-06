@@ -1,8 +1,5 @@
 package com.example.storereservation.global.auth.sercurity;
 
-import com.example.storereservation.global.exception.ErrorCode;
-import com.example.storereservation.global.exception.MyException;
-import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
