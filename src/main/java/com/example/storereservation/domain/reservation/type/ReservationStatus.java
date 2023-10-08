@@ -42,6 +42,7 @@ public enum ReservationStatus {
 
     public static ReservationStatus of(String status){
         status = status.toUpperCase();
+
         if(!StringUtils.hasText(status)){
             throw new MyException(ErrorCode.RESERVATION_STATUS_CODE_REQUIRED);
         }

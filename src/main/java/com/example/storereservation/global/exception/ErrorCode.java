@@ -57,7 +57,7 @@ public enum ErrorCode {
 
     NO_AUTHORITY_ERROR(HttpStatus.FORBIDDEN.value(), "권한이 없습니다."),
     NOT_FOUND_ERROR(HttpStatus.NOT_FOUND.value(), "404 NOT FOUND"),
-    BAD_REQUEST_ERROR(HttpStatus.BAD_REQUEST.value(), "404 NOT FOUND"),
+    BAD_REQUEST_ERROR(HttpStatus.BAD_REQUEST.value(), "BAD_REQUEST"),
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR.value(), "내부 서버 오류가 발생 했습니다.");
 
     private final int statusCode;
